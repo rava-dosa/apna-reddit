@@ -28,10 +28,23 @@ def hello():
     print(req["podu"])
     return "<h2>jQuery and AJAX is FUN!</h2>"
 
+
 @app.route("/testreg")
 def test_reg():
     return render_template('registration.html')
     # return "poijhgf"
+
+@app.route("/PostComment")
+def Post_cmnt():
+    return render_template('create_post.html')
+
+@app.route("/recvPostCmnt",methods=['GET', 'POST'])
+def recv_post_cmnt():
+    if (request.method == 'POST'):
+        # import pdb;pdb.set_trace()
+        req=request.form.to_dict()
+        print(req["post"])
+        return "<h>Apoorva</h>"
 
 app.run(debug=True,threaded=True)
 

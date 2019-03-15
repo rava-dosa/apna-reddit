@@ -77,5 +77,15 @@ def logout():
 	dc1(cookie)
 	return "<h>Logged out</h>"
 
+@app.route("/get_username",methods=["POST"])
+def get_username():
+	req = request.headers.to_dict()
+	cookie=req["cookie"]
+	user_id=gu1(cookie)
+	if (user_id is None):
+		return "Invaid cookie"
+	else:
+		return user_id
+# @app.route("/")
 app.run(debug=True,threaded=True)
 

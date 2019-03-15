@@ -5,9 +5,11 @@ cur.execute("CREATE TABLE if not exists USER1 (user_id text PRIMARY KEY, name te
 cur.execute("CREATE TABLE if not exists contact_numbers(user_id text REFERENCES USER1(user_id),phone_no integer, primary key (user_id, phone_no));")
 cur.execute("CREATE table if not exists subreddit (name text primary key, subreddit_created_at timestamp, user_id text REFERENCES user1(user_id));")
 cur.execute("CREATE table if not exists post (post_id text primary key, content text, post_created_at timestamp, user_id text REFERENCES user1(user_id), subreddit_name text REFERENCES subreddit(name));")
-cur.execute("CREATE table if not exists post_liked(user_id text references user1(user_id), post_id text references post(post_id));")
-cur.execute("CREATE table if not exists post_disliked(user_id text references user1(user_id), post_id text references post(post_id));")
+cur.execute("CREATE table if not exists post_liked(user_id text references user1(user_id), post_id text references post(post_id), primary key(user_id,post_id));")
+cur.execute("CREATE table if not exists post_disliked(user_id text references user1(user_id), post_id text references post(post_id), primary key(user_id,post_id));")
 cur.execute("CREATE table if not exists comment(comment_id text primary key, user_id text references user1(user_id), comment_content text, created_at timestamp, parent_id text, post_id text references post(post_id));")
 cur.execute("CREATE table if not exists cookie(user_id text references user1(user_id), cookie text, primary key(user_id, cookie));")
+cur.execute("CREATE table if not exists cmt_liked(user_id text references user1(user_id), comment_id text references comment(comment_id), primary key(user_id, comment_id));")
+cur.execute("CREATE table if not exists cmt_disliked(user_id text references user1(user_id), comment_id text references comment(comment_id), primary key(user_id, comment_id));")
 conn.commit()
 

@@ -4,7 +4,7 @@ from flask import request
 from db import insert_user as is1
 from db import insert_contact as ic1
 from db import get_password as gp1
-from db import insert_cookie as ic1
+from db import insert_cookie as ic2
 from db import get_userid as gu1
 from db import delete_cookie as dc1
 from datetime import datetime
@@ -65,7 +65,7 @@ def login():
 		else:
 			if(pass_database==password):
 				cookie=str(uuid1())
-				ret=ic1(user_id,cookie)
+				ret=ic2(user_id,cookie)
 				return cookie
 			else:
 				return "<h>wrong password</h>"

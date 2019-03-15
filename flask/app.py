@@ -6,6 +6,7 @@ from db import insert_contact as ic1
 from db import get_password as gp1
 from db import insert_cookie as ic1
 from db import get_userid as gu1
+from db import delete_cookie as dc1
 from datetime import datetime
 from uuid import uuid1
 
@@ -38,11 +39,11 @@ def test_reg():
     return render_template('registration.html')
     # return "poijhgf"
 
-@app.route("/PostComment")
+@app.route("/testpost")
 def Post_cmnt():
     return render_template('create_post.html')
 
-@app.route("/recvPostCmnt",methods=['GET', 'POST'])
+@app.route("/createpost",methods=['GET', 'POST'])
 def recv_post_cmnt():
     if (request.method == 'POST'):
         # import pdb;pdb.set_trace()
@@ -68,6 +69,13 @@ def login():
 				return cookie
 			else:
 				return "<h>wrong password</h>"
+
+@app.route("/logout",methods=["POST"])
+def logout():
+	req = request.headers.to_dict()
+	cookie=req["cookie"]
+	dc1(cookie)
+	return "<h>Logged out</h>"
 
 app.run(debug=True,threaded=True)
 

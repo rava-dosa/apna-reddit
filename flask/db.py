@@ -51,3 +51,9 @@ def get_userid(cookie=None):
 	conn.commit()
 	return user_ret
 
+def delete_cookie(cookie=None):
+	conn = psycopg2.connect(dbname="mydb", user="myuser", password="mypass",host="localhost")
+	cur = conn.cursor()
+	cur.execute("DELETE from cookie where cookie='{}'".format(cookie))
+	return 1
+

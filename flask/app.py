@@ -13,6 +13,7 @@ from db import insert_cmt_disliked as icmdl
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
+import json
 
 app = Flask(__name__)
 
@@ -91,7 +92,6 @@ def get_username():
 	else:
 		return user_id
 
-
 @app.route("/comment",methods=["POST"])
 def comment():
     req=request.headers.to_dict()
@@ -138,6 +138,19 @@ def comment_disliked():
         #WRITE RETURN VALUE
         return "<h1>You Downvoted this comment</h1>"
 
-# @app.route("/")
+
+@app.route("/testcomment")
+def test_comment():
+	return render_template("comment.html")
+
+@app.route("/dummyjson")
+def dummyjson():
+	dic1={"cid":1,"ctext":"hi there"}
+	dic2={"cid":2,"ctext":"hi there1"}
+	dic3={"cid":3,"ctext":"hi there2"}
+	dic_master=[dic1,dic2,dic3]
+	dump=json.dumps(dic_master)
+	return dump
+
 app.run(debug=True,threaded=True)
 

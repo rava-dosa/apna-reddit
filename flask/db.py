@@ -55,5 +55,26 @@ def delete_cookie(cookie=None):
 	conn = psycopg2.connect(dbname="mydb", user="myuser", password="mypass",host="localhost")
 	cur = conn.cursor()
 	cur.execute("DELETE from cookie where cookie='{}'".format(cookie))
+	conn.commit()
+	return 1
+
+def insert_comment(comment_id=None, user_id=None, comment_content=None,created_at=None,parent_id=None,post_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("INSERT INTO comment(comment_id,user_id,comment_content,created_at,parent_id,post_id) VALUES(%s,%s,%s,%s,%s)",(comment_id,user_id,comment_content,created_at,parent_id,post_id))
+	conn.commit()
+	return 1
+
+def insert_cmt_liked(user_id=None,comment_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("INSERT INTO cmt_liked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+	conn.commit()
+	return 1
+def insert_cmt_disliked(user_id=None,comment_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("INSERT INTO cmt_disliked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+	conn.commit()
 	return 1
 

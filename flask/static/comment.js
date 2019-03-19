@@ -1,3 +1,4 @@
+var parent_url="http://localhost:5000/"
 function cc_helper(id1,text1){
 	var para = document.createElement("P");
 	var t = document.createTextNode(text1);
@@ -56,12 +57,53 @@ ajaxy.always(function(jqXHR,xhr,data,response){
 
 });
 }
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function post1(url1,data1){
+cookie=getCookie("Login_cookie");
+    ajaxy=$.ajax({
+    	url: url1,
+    	method: "POST",
+    	dataType: "json",
+        headers:{"cookie123":cookie},
+    	data: data1
+    });
+    return ajaxy;
+}
 $(document).on("click","#upvote",function(){
 	var id = $(this).closest("div").prop("id");
+	// background-color: ;
+	$(this).attr("color","#4CAF50")
+	var data1={"comment_id":id};
+	ajaxy=post1(parent_url+"comment_liked",data1)
+	ajaxy.always(function(){
+		console.log(ajaxy);
+	});
 	console.log("upvote"+id);
 });
 
 $(document).on("click","#downvote",function(){
+	var id = $(this).closest("div").prop("id");
+	$(this).attr("color","#4CAF50")
+	var data1={"comment_id":id};
+	ajaxy=post1(parent_url+"comment_disliked",data1)
+	ajaxy.always(function(){
+		console.log(ajaxy);
+	});	
 	console.log("downvote")
 });
 $(document).on("click","#reply",function(){
@@ -72,6 +114,11 @@ $(document).on("click","#reply",function(){
 	var id = $(this).closest("div").prop("id");
 	create_textbox(id);
 	text=document.getElementById("myText").value;
+	var data1={"comment_id":id,"comment_content":text}
+	ajaxy=post1(parent_url+"comment",data1)
+	ajaxy.always(function(){
+		console.log(ajaxy);
+	})
 	console.log(text);
 	console.log("reply")
 });

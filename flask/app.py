@@ -97,15 +97,6 @@ def get_username():
     else:
         return user_id
 
-@app.route("/get_username",methods=["POST"])
-def get_username():
-	req = request.headers
-	cookie=req["cookie123"]
-	user_id=gu1(cookie)
-	if (user_id is None):
-		return "Invaid cookie"
-	else:
-		return user_id
 
 @app.route("/comment",methods=["POST"])
 def comment():
@@ -168,7 +159,7 @@ def dummyjson():
     return dump
 
 @app.route("/comments/<postid>/<commentid>")
-def testapi(postid,commentid):
+def testapi_random(postid,commentid):
     # import pdb;pdb.set_trace();
     post=gp2(postid)
     comment=gc1(commentid)
@@ -177,7 +168,7 @@ def testapi(postid,commentid):
     num_of_upvotes=len(comment_liked)
     num_of_downvotes=len(comment_disliked)
     total_like=num_of_upvotes-num_of_downvotes
-    dic={"post":post[0][0],"total_upvote":total_like,"comment":comment[0][0],"post_id":postid,"comment_id":commentid}
+    dic={"post":post[0][0],"upvote":num_of_upvotes,"downvote":num_of_downvotes,"comment":comment[0][0],"post_id":postid,"comment_id":commentid}
     dump=json.dumps(dic)
     return dump
 

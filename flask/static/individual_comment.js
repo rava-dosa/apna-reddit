@@ -1,4 +1,4 @@
-function create_content(post,comment,post_id,comment_id,num_of_upvote){
+function create_content(post,comment,post_id,comment_id,upvote,downvote){
 	var post_box=document.createElement("div");
 	post_box.innerHTML=post;
 	post_box.setAttribute("id",post_id);
@@ -8,11 +8,13 @@ function create_content(post,comment,post_id,comment_id,num_of_upvote){
 	var upbtn=document.createElement("button");
 	upbtn.innerHTML="upvote";
 	upbtn.setAttribute("id","upvote");
-	var num_vote=document.createElement("span");
-	num_vote.innerHTML=num_of_upvote;
+	var Upvote=document.createElement("span");
+	Upvote.innerHTML=upvote;
 	var downbtn=document.createElement("button");
 	downbtn.innerHTML="downvote";
 	downbtn.setAttribute("id","downvote");
+	var Downvote=document.createElement("span");
+	Downvote.innerHTML=downvote;
 	var reply=document.createElement("button");
 	reply.setAttribute("id","reply")
 	reply.innerHTML="reply"
@@ -21,8 +23,9 @@ function create_content(post,comment,post_id,comment_id,num_of_upvote){
 	div1.appendChild(post_box);
 	div1.appendChild(cmnt);
 	div1.appendChild(upbtn);
-	div1.appendChild(num_vote);
+	div1.appendChild(Upvote);
 	div1.appendChild(downbtn);
+	div1.appendChild(Downvote);
 	div1.appendChild(reply);
 	div1.style.border = "thick solid #00FFFF"
 	document.getElementById("comments").appendChild(div1);
@@ -37,7 +40,7 @@ var ajaxy = $.ajax({
 ajaxy.always(function(jqXHR,xhr,data,response){
 	// console.log(ajaxy.responseText);
 	var a=JSON.parse(ajaxy.responseText);
-	create_content(a["post"],a["comment"],a["post_id"],a["comment_id"],a["total_upvote"]);
+	create_content(a["post"],a["comment"],a["post_id"],a["comment_id"],a["upvote"],a["downvote"]);
 
 });
 }

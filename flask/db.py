@@ -61,11 +61,54 @@ def delete_cookie(cookie=None):
     return 1
 
 def insert_comment(comment_id=None, user_id=None, comment_content=None,created_at=None,parent_id=None,post_id=None):
-    con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
-    cur=con.cursor()
-    cur.execute("INSERT INTO comment(comment_id,user_id,comment_content,created_at,parent_id,post_id) VALUES(%s,%s,%s,%s,%s)",(comment_id,user_id,comment_content,created_at,parent_id,post_id))
-    con.commit()
-    return 1
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("INSERT INTO comment(comment_id,user_id,comment_content,created_at,parent_id,post_id) VALUES(%s,%s,%s,%s,%s)",(comment_id,user_id,comment_content,created_at,parent_id,post_id))
+	con.commit()
+	return 1
+
+def insert_cmt_liked(user_id=None,comment_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("INSERT INTO cmt_liked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+	con.commit()
+	return 1
+def insert_cmt_disliked(user_id=None,comment_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("INSERT INTO cmt_disliked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+	con.commit()
+	return 1
+def get_comment(comment_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("SELECT comment_content,comment_id from comment where comment_id='{}'".format(comment_id))
+	data=cur.fetchall()
+	con.commit()
+	return data
+def get_comment_liked(comment_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("SELECT user_id from cmt_liked where comment_id='{}'".format(comment_id))
+	data=cur.fetchall()
+	con.commit()
+	return data
+def get_comment_disliked(comment_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("SELECT user_id from cmt_disliked where comment_id='{}'".format(comment_id))
+	data=cur.fetchall()
+	con.commit()
+	return data
+
+def get_post(post_id=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("SELECT content from post where post_id='{}'".format(post_id))
+	# data=cur.fetchone()[0]
+	data=cur.fetchall()
+	con.commit()
+	return data
 
 def insert_cmt_liked(user_id=None,comment_id=None):
     con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")

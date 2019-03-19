@@ -115,7 +115,7 @@ def comment():
 def comment_liked():
     req=request.headers.to_dict()
     cookie=req["cookie123"]
-    user_id=g1(cookie)
+    user_id=gu1(cookie)
     if(user_id is None):
         return "Invaid cookie"
     else:
@@ -129,7 +129,7 @@ def comment_liked():
 def comment_disliked():
     req=request.headers.to_dict()
     cookie=req["cookie123"]
-    user_id=g1(cookie)
+    user_id=gu1(cookie)
     if(user_id is None):
         return "Invaid cookie"
     else:

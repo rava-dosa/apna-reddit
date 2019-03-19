@@ -124,6 +124,36 @@ def insert_cmt_disliked(user_id=None,comment_id=None):
     con.commit()
     return 1
 
+def get_upvote_downvote_by_post(subreddit=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select post.post_id, post.content from subreddit, post where post.subreddit_name = subreddit.name and subreddit.name='{}' order by post.post_created_at desc".format(subreddit))
+	post_ids = cur.fetchall()
+	print (post_ids)
+	POSTS = dict()
+	for i,text  in post_ids:
+		POSTS[i] = dict()
+		Num_likes = 0
+		Num_dislikes = 0
+		try:
+			cur.execute("select count(*) as post_liked from post_liked where post_id='{}' group by post_id".format(i[0]))
+			Num_likes = cur.fetchone()[0]
+		except:
+			pass
+		print("Number of likes:",Num_likes)
+		
+		try:
+			cur.execute("select count(*) as post_disliked from post_disliked where post_id='{}' group by post_id".format(i[0]))
+			Num_dislikes = cur.fetchone()[0]
+		except:
+			pass
+		print("Number of dislikes:",Num_dislikes)
+		
+		POSTS[i]["likes"] = Num_likes
+		POSTS[i]["dislikes"] = Num_dislikes
+		POSTS[i]["text"] = text
+	return POSTS
+
 def create_subreddit(name1=None,subreddit_created_at=None,user_id=None):
     con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
     cur=con.cursor()

@@ -78,14 +78,14 @@ def login():
 
 @app.route("/logout",methods=["POST"])
 def logout():
-	req = request.headers.to_dict()
+	req = request.headers
 	cookie=req["cookie123"]
 	dc1(cookie)
 	return "<h>Logged out</h>"
 
 @app.route("/get_username",methods=["POST"])
 def get_username():
-	req = request.headers.to_dict()
+	req = request.headers
 	cookie=req["cookie123"]
 	user_id=gu1(cookie)
 	if (user_id is None):
@@ -95,7 +95,7 @@ def get_username():
 
 @app.route("/comment",methods=["POST"])
 def comment():
-    req=request.headers.to_dict()
+    req=request.headers
     cookie=req["cookie123"]
     user_id=gu1(cookie)
     if(user_id is None):
@@ -125,7 +125,6 @@ def comment_liked():
         ret=icml(user_id,comment_id)
         #WRITE RETURN VALUE
         return "<h1>You Upvoted this comment</h1>"
-
 
 @app.route("/comment_disliked",methods=["POST"])
 def comment_disliked():

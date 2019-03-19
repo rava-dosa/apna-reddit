@@ -10,6 +10,7 @@ from db import delete_cookie as dc1
 from db import insert_comment as icm
 from db import insert_cmt_liked as icml
 from db import insert_cmt_disliked as icmdl
+from db import create_subreddit as cs1
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -103,7 +104,8 @@ def comment():
        # comment_id=req["comment_id"]
        #COMMENT ID TO BE CREATED BY HASH OF PARENT ID AND TIMESTAMP
         comment_content=req["comment_content"]
-        created_at=str(datetime.now())
+        # created_at=str(datetime.now())
+        created_at=datetime.now()
         comment_id=hashlib.sha256(created_at)
         parent_id=req["parent_id"]
         post_id=req["post_id"]
@@ -113,7 +115,7 @@ def comment():
 
 @app.route("/comment_liked",methods=["POST"])
 def comment_liked():
-    req=request.headers.to_dict()
+    req=request.headers
     cookie=req["cookie123"]
     user_id=gu1(cookie)
     if(user_id is None):
@@ -127,7 +129,7 @@ def comment_liked():
 
 @app.route("/comment_disliked",methods=["POST"])
 def comment_disliked():
-    req=request.headers.to_dict()
+    req=request.headers
     cookie=req["cookie123"]
     user_id=gu1(cookie)
     if(user_id is None):
@@ -151,6 +153,25 @@ def dummyjson():
 	dic_master=[dic1,dic2,dic3]
 	dump=json.dumps(dic_master)
 	return dump
+
+@app.route("/createsubreddit",methods=["POST"])
+def create_subreddit():
+    # import pdb;pdb.set_trace()
+    req=request.headers
+    cookie=req["cookie123"]
+    user_id=gu1(cookie)
+    if(user_id is None):
+        return "Invalid user"
+    else:
+        req1=request.form.to_dict()
+        # import pdb;pdb.set_trace()
+        subreddit_name=req1["subreddit_name"]
+        ret=cs1(name1=subreddit_name,subreddit_created_at=datetime.now(),user_id=user_id)
+        return "{} created Succefully".format(subreddit_name)
+
+@app.route("/testsubreddit")
+def ret_subreddit():
+    return render_template("create_subreddit.html")
 
 app.run(debug=True,threaded=True)
 

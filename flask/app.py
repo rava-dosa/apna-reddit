@@ -7,8 +7,13 @@ from db import get_password as gp1
 from db import insert_cookie as ic2
 from db import get_userid as gu1
 from db import delete_cookie as dc1
+from db import insert_comment as icm
+from db import insert_cmt_liked as icml
+from db import insert_cmt_disliked as icmdl
 from datetime import datetime
 from uuid import uuid1
+import hashlib 
+import json
 
 app = Flask(__name__)
 
@@ -73,9 +78,79 @@ def login():
 @app.route("/logout",methods=["POST"])
 def logout():
 	req = request.headers.to_dict()
-	cookie=req["cookie"]
+	cookie=req["cookie123"]
 	dc1(cookie)
 	return "<h>Logged out</h>"
+
+@app.route("/get_username",methods=["POST"])
+def get_username():
+	req = request.headers.to_dict()
+	cookie=req["cookie123"]
+	user_id=gu1(cookie)
+	if (user_id is None):
+		return "Invaid cookie"
+	else:
+		return user_id
+
+@app.route("/comment",methods=["POST"])
+def comment():
+    req=request.headers.to_dict()
+    cookie=req["cookie123"]
+    user_id=g1(cookie)
+    if(user_id is None):
+        return "Invaid cookie"
+    else:
+       # comment_id=req["comment_id"]
+       #COMMENT ID TO BE CREATED BY HASH OF PARENT ID AND TIMESTAMP
+        comment_content=req["comment_content"]
+        created_at=str(datetime.now())
+        comment_id=hashlib.sha256(created_at)
+        parent_id=req["parent_id"]
+        post_id=req["post_id"]
+        ret=icm(comment_id,user_id,comment_content,created_at,parent_id,post_id)
+        #WRITE RETURN VALUE
+        return "<h>Succefully commentted</h>"
+
+@app.route("/comment_liked",methods=["POST"])
+def comment_liked():
+    req=request.headers.to_dict()
+    cookie=req["cookie123"]
+    user_id=g1(cookie)
+    if(user_id is None):
+        return "Invaid cookie"
+    else:
+        comment_id=["comment_id"]
+        ret=icml(user_id,comment_id)
+        #WRITE RETURN VALUE
+        return "<h1>You Upvoted this comment</h1>"
+
+
+@app.route("/comment_disliked",methods=["POST"])
+def comment_disliked():
+    req=request.headers.to_dict()
+    cookie=req["cookie123"]
+    user_id=g1(cookie)
+    if(user_id is None):
+        return "Invaid cookie"
+    else:
+        comment_id=["comment_id"]
+        ret=icmdl(user_id,comment_id)
+        #WRITE RETURN VALUE
+        return "<h1>You Downvoted this comment</h1>"
+
+
+@app.route("/testcomment")
+def test_comment():
+	return render_template("comment.html")
+
+@app.route("/dummyjson")
+def dummyjson():
+	dic1={"cid":1,"ctext":"hi there"}
+	dic2={"cid":2,"ctext":"hi there1"}
+	dic3={"cid":3,"ctext":"hi there2"}
+	dic_master=[dic1,dic2,dic3]
+	dump=json.dumps(dic_master)
+	return dump
 
 app.run(debug=True,threaded=True)
 

@@ -78,3 +78,38 @@ def insert_cmt_disliked(user_id=None,comment_id=None):
 	conn.commit()
 	return 1
 
+def get_upvote_downvote_by_post(subreddit=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select post.post_id, post.content from subreddit, post where post.subreddit_name = subreddit.name and subreddit.name='{}' order by post.post_created_at desc".format(subreddit))
+	post_ids = cur.fetchall()
+	print (post_ids)
+	POSTS = dict()
+	for i,text  in post_ids:
+		POSTS[i] = dict()
+		Num_likes = 0
+		Num_dislikes = 0
+		try:
+			cur.execute("select count(*) as post_liked from post_liked where post_id='{}' group by post_id".format(i[0]))
+			Num_likes = cur.fetchone()[0]
+		except:
+			pass
+		print("Number of likes:",Num_likes)
+		
+		try:
+			cur.execute("select count(*) as post_disliked from post_disliked where post_id='{}' group by post_id".format(i[0]))
+			Num_dislikes = cur.fetchone()[0]
+		except:
+			pass
+		print("Number of dislikes:",Num_dislikes)
+		
+		POSTS[i]["likes"] = Num_likes
+		POSTS[i]["dislikes"] = Num_dislikes
+		POSTS[i]["text"] = text
+	return POSTS
+
+	# res = cur.execute("select * from (select count() as post_liked from post_liked where post_id='%s' group by post_id) as T1,(select count() as post_disliked from post_disliked where post_id='%s' group by post_id) as T2",post_id,post_id)
+	# conn.commit()
+	# return res.fetchone()
+
+# select * from (select 'C' as CATEGORY, comment_id as ID, comment_content as CONT, created_at as C_AT, parent_id as P_ID, post_id as PO_ID from comment where user_id='1' UNION ALL select 'P' as CATEGORY, post_id as ID, content as CONT, post_created_at as C_AT, NULL as P_ID, NULL as PO_ID from post where user_id='1') as T order by T.C_AT DESC

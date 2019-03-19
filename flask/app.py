@@ -10,6 +10,7 @@ from db import delete_cookie as dc1
 from db import insert_comment as icm
 from db import insert_cmt_liked as icml
 from db import insert_cmt_disliked as icmdl
+from db import get_upvote_downvote_by_post as gudbp
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -152,5 +153,11 @@ def dummyjson():
 	dump=json.dumps(dic_master)
 	return dump
 
-app.run(debug=True,threaded=True)
+@app.route("/r/<sub_reddit>")
+def get_all_posts(sub_reddit):
+    print("Requested sub_reddit:", sub_reddit)
+    POSTS = gudbp(sub_reddit)
+    Posts = json.dumps(POSTS)
+    return "<h6>{}</h6>".format(Posts)
 
+app.run(debug=True,threaded=True)

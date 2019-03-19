@@ -196,11 +196,15 @@ def create_subreddit():
 def ret_subreddit():
     return render_template("create_subreddit.html")
 
-@app.route("/r/<sub_reddit>")
+@app.route("/r_render/<sub_reddit>", methods=["GET"])
 def get_all_posts(sub_reddit):
-    print("Requested sub_reddit:", sub_reddit)
     POSTS = gudbp(sub_reddit)
     Posts = json.dumps(POSTS)
-    return "<h6>{}</h6>".format(Posts)
+    return Posts
+
+@app.route("/r/<sub_reddit>")
+def r_subreddits(sub_reddit):
+    return render_template("subreddit.html")
+
 
 app.run(debug=True,threaded=True)

@@ -96,7 +96,7 @@ def get_username():
 def comment():
     req=request.headers.to_dict()
     cookie=req["cookie123"]
-    user_id=g1(cookie)
+    user_id=gu1(cookie)
     if(user_id is None):
         return "Invaid cookie"
     else:

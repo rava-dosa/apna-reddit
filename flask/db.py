@@ -129,7 +129,6 @@ def get_upvote_downvote_by_post(subreddit=None):
 	cur=con.cursor()
 	cur.execute("select post.post_id, post.content from subreddit, post where post.subreddit_name = subreddit.name and subreddit.name='{}' order by post.post_created_at desc".format(subreddit))
 	post_ids = cur.fetchall()
-	print (post_ids)
 	POSTS = dict()
 	for i,text  in post_ids:
 		POSTS[i] = dict()
@@ -140,14 +139,12 @@ def get_upvote_downvote_by_post(subreddit=None):
 			Num_likes = cur.fetchone()[0]
 		except:
 			pass
-		print("Number of likes:",Num_likes)
 		
 		try:
 			cur.execute("select count(*) as post_disliked from post_disliked where post_id='{}' group by post_id".format(i[0]))
 			Num_dislikes = cur.fetchone()[0]
 		except:
 			pass
-		print("Number of dislikes:",Num_dislikes)
 		
 		POSTS[i]["likes"] = Num_likes
 		POSTS[i]["dislikes"] = Num_dislikes

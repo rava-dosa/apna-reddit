@@ -110,12 +110,12 @@ function get_recent_likes(){
     ret=ajaxy.responseText;
     retstr=JSON.parse(ret);
     retkey=Object.keys(retstr);
-      key1=retkey[0];
+      key1="comments_liked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
         create_hyperlink("all_likes",retlist[j][1].slice(0,30),parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
       }
-    key1=retkey[1];
+      key1="posts_disliked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
         create_hyperlink("all_likes",retlist[j][1].slice(0,30),parent_url+"post/"+retlist[j][0])
@@ -132,12 +132,12 @@ function get_recent_dislikes(){
 ret=ajaxy.responseText;
     retstr=JSON.parse(ret);
     retkey=Object.keys(retstr);
-      key1=retkey[0];
+    key1="comments_disliked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
         create_hyperlink("all_dislikes",retlist[j][1].slice(0,30),parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
       }
-    key1=retkey[1];
+      key1="posts_disliked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
         create_hyperlink("all_dislikes",retlist[j][1].slice(0,30),parent_url+"post/"+retlist[j][0])

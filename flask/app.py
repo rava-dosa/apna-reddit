@@ -302,7 +302,6 @@ def get_comment_post_count():
         ANS = json.dumps(ANS)
         return ANS
 
-
 @app.route("/post/<postid>")
 def render_post(postid):
     return render_template("post.html")
@@ -334,6 +333,8 @@ def subscribe():
     if (user_id is None):
         return "Invaid cookie"
     else:
-        return user_id
-        
+        req = request.form.to_dict()
+        post_id = req["subreddit_name"]
+        subs(user_id)
+
 app.run(debug=True,threaded=True)

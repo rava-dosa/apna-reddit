@@ -20,6 +20,9 @@ from db import get_post as gp2
 from db import create_subreddit as cs1
 from db import get_subreddit as gs1
 from db import insert_post as ip1
+from db import get_all_comments_by_user as gacbu
+from db import get_all_likes_by_user as galbu
+from db import get_all_dislikes_by_user as gadlbu
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -252,32 +255,36 @@ def get_all_subreddit():
     return str1
 
 @app.route("/get/all_comment_user")
-def get_all_comment():
-    # return comment text,commentid and post id.
+def get_all_comment_user():
     head=request.headers
     user_id = gu1(head["cookie123"])
     if(user_id is None):
         return "failure"
     else:
-        # req = request.form.to_dict()
-        return "success"
+        req = request.form.to_dict()
+        ans = gacbu(user_id)
+        return str(ans)
 
 @app.route("/get/all_likes_user")
-def get_all_likes():
-    #return if (comment like) then comment and post id and comment text,
-    # if post like then post text, post id
-    head=request.headers
+def get_all_likes_user():
+    head = request.headers
     if(gu1(head["cookie123"]) is None):
         return "failure"
     else:
-        return "success"
-    
+        req = request.form.to_dict()
+        C_P_liked = galbu(user_id)
+        C_P_liked = json.dumps(C_P_liked)
+        return C_P_liked
+
 @app.route("/get/all_dislikes_user")
-def get_all_dislikes():
-    head=request.headers
+def get_all_dislikes_user():
+    head = request.headers
     if(gu1(head["cookie123"]) is None):
         return "failure"
     else:
-        return "success"
+        req = request.form.to_dict()
+        C_P_disliked = gadlbu(user_id)
+        C_P_disliked = json.dumps(C_P_disliked)
+        return C_P_disliked
 
 app.run(debug=True,threaded=True)

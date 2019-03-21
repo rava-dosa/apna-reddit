@@ -226,14 +226,55 @@ def insert_post_disliked(user_id=None, post_id=None):
 	return 1
 
 def get_all_comments_by_user(user_id=None):
-	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
-	cur=con.cursor()
+	con = psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur = con.cursor()
 	try:
-		con.execute("select * from comment where user_id='{}'".format(user_id))
-		# ans = cur.fetchall()[0]
-		# print(ans)
+		cur.execute("select comment_id, post_id, comment_content from comment where user_id='{}' order by created_at DESC".format(user_id))
+		ans = cur.fetchall()
 		con.commit()
-		return 1		
+		return ans
 	except:
 		pass 
-	return 0
+	return []
+
+def get_all_likes_by_user(user_id=None):
+	con = psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur = con.cursor()
+	ANS = dict()
+	ans = ""
+	ans2 = ""
+	try:
+		cur.execute("select C.comment_id, C.comment_content, C.post_id from cmt_liked as CL, comment as C where C.comment_id=CL.comment_id and CL.user_id='{}'".format(user_id))
+		ans = cur.fetchall()
+	except:
+		pass
+	try:
+		cur.execute("select P.post_id, P.content from post_liked as PL, post as P where P.post_id=PL.post_id and PL.user_id='{}'".format(user_id))
+		ans2 = cur.fetchall()
+	except:
+		pass
+	ANS["comments_liked"]=ans
+	ANS["posts_liked"]=ans2
+	con.commit()
+	return ANS
+
+def get_all_dislikes_by_user(user_id=None):
+	con = psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur = con.cursor()
+	ANS = dict()
+	ans = ""
+	ans2 = ""
+	try:
+		cur.execute("select C.comment_id, C.comment_content, C.post_id from cmt_disliked as CL, comment as C where C.comment_id=CL.comment_id and CL.user_id='{}'".format(user_id))
+		ans = cur.fetchall()
+	except:
+		pass
+	try:
+		cur.execute("select P.post_id, P.content from post_disliked as PL, post as P where P.post_id=PL.post_id and PL.user_id='{}'".format(user_id))
+		ans2 = cur.fetchall()
+	except:
+		pass
+	ANS["comments_disliked"]=ans
+	ANS["posts_disliked"]=ans2
+	con.commit()
+	return ANS

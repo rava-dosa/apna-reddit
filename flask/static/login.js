@@ -1,3 +1,4 @@
+parent_url="http://localhost:5000/"
 function setCookie(cname,cvalue,exdays) {
     var d = new Date();  
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -24,6 +25,7 @@ function LOGIN() {
         var n = recv.search("<h>");
         if(n==-1){
             setCookie("Login_cookie",recv, 1);
+            window.open(parent_url+"profile");
         }else{
             document.getElementById("l_form").innerHTML=recv;
         }

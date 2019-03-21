@@ -63,7 +63,7 @@ def delete_cookie(cookie=None):
 def insert_comment(comment_id=None, user_id=None, comment_content=None,created_at=None,parent_id=None,post_id=None):
 	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
 	cur=con.cursor()
-	cur.execute("INSERT INTO comment(comment_id,user_id,comment_content,created_at,parent_id,post_id) VALUES(%s,%s,%s,%s,%s)",(comment_id,user_id,comment_content,created_at,parent_id,post_id))
+	cur.execute("INSERT INTO comment(comment_id,user_id,comment_content,created_at,parent_id,post_id) VALUES(%s,%s,%s,%s,%s,%s)",(comment_id,user_id,comment_content,created_at,parent_id,post_id))
 	con.commit()
 	return 1
 
@@ -183,43 +183,43 @@ def insert_cmt_disliked(user_id=None,comment_id=None):
 	con.commit()
 	return 1
 
-def insert_post_liked(user_id=None, post_id=None):
+def insert_post_liked(user_id=None, comment_id=None):
 	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
 	cur=con.cursor()
 	try:
 		# Check if like already exist
-		cur.execute("select * from post_liked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("select * from post_liked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
-		cur.execute("delete from post_liked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("delete from post_liked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 	except:
 		# otherwise insert into table
-		cur.execute("INSERT INTO post_liked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+		cur.execute("INSERT INTO post_liked(user_id,post_id) VALUES(%s,%s)",(user_id,comment_id))
 	try:
 		# Check if dislike already exist then remove it
-		cur.execute("select * from post_disliked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("select * from post_disliked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
-		cur.execute("delete from post_disliked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("delete from post_disliked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 	except:
 		pass
 	con.commit()
 	return 1
 
-def insert_post_disliked(user_id=None, post_id=None):
+def insert_post_disliked(user_id=None, comment_id=None):
 	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
 	cur=con.cursor()
 	try:
 		# Check if dislike already exist
-		cur.execute("select * from post_disliked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("select * from post_disliked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
-		cur.execute("delete from post_disliked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("delete from post_disliked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 	except:
 		# otherwise insert into table
-		cur.execute("INSERT INTO post_disliked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+		cur.execute("INSERT INTO post_disliked(user_id,post_id) VALUES(%s,%s)",(user_id,comment_id))
 	try:
 		# Check if like already exist then remove it
-		cur.execute("select * from post_liked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("select * from post_liked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
-		cur.execute("delete from post_liked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		cur.execute("delete from post_liked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 	except:
 		pass
 	con.commit()
@@ -325,3 +325,48 @@ def get_cmt_ld_count_of_post_by_user(user_id=None, post_id=None):
 
 	con.commit()
 	return ANS
+
+def get_post_data(post_id):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select post_id,count(*) from post_disliked where post_id='{}' group by post_id".format(post_id))
+	ret=cur.fetchone()
+	if(ret is None):
+		post_dislike=0
+	else:
+		post_dislike=ret[1]
+	cur.execute("select post_id,count(*) from post_liked where post_id='{}' group by post_id".format(post_id))
+	ret=cur.fetchone()
+	if(ret is None):
+		post_like=0
+	else:
+		post_like=ret[1]
+	print(post_like,post_dislike)
+	cur.execute("select content from post where post_id='{}'".format(post_id))
+	post_text=cur.fetchone()[0]
+	return [post_text,post_like,post_dislike]
+
+def get_comment_updown(comment_id):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select count(*) from (select comment_id from cmt_disliked where comment_id='{}') as foo".format(comment_id))
+	dis_l=cur.fetchone()[0]
+	cur.execute("select count(*) from (select comment_id from cmt_liked where comment_id='{}') as foo".format(comment_id))
+	l=cur.fetchone()[0]
+	return [l,dis_l]	
+
+def get_comment_data(post_id):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select comment_id from comment where post_id='{}'".format(post_id))
+	ret=cur.fetchall()
+	l=[]
+	for x in range(0,len(ret)):
+		temp=get_comment_updown(ret[x][0])
+		cur.execute("select comment_content from comment where comment_id='{}'".format(ret[x][0]))
+		ret1=cur.fetchone()[0]
+		temp.append(ret1)
+		temp.append(ret[x][0])
+		l.append(temp)
+	return l
+

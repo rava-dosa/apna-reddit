@@ -58,23 +58,29 @@ $(document).ready(function(){
   });
 });
 function create_post_helper(key,a){
-  var a=document.createElement("a");
-  a.setAttribute("href",window.location.href+key);
+  // var a= document.createElement("a");
+  // a.setAttribute("href",parent_url+"post/"+key)
   var para = document.createElement("P");
+  para.setAttribute("class","h2");
+  var para1 = document.createElement("P");
+  para1.innerHTML="Upvotes: "+a["likes"]+" Dislikes: "+a["dislikes"]
+  console.log(a);
   para.innerHTML=a["text"];
   var div= document.createElement("div");
   div.setAttribute("id",key);
   // div.setAttribute("borderColor","red");
-  div.style.borderColor ="red";
-  a.appendChild(div);
+  // div.style.borderColor ="red";
   div.appendChild(para);
-  var para1 = document.createElement("P");
-  para1.innerHTML="Upvotes->"+a["likes"]
-  var para2 = document.createElement("P");
-  para2.innerHTML="Downvotes->"+a["dislikes"]
   div.appendChild(para1);
-  div.appendChild(para2);
-  document.getElementById("all_post").appendChild(a);
+  var a= document.createElement("a");
+  a.setAttribute("href",parent_url+"post/"+key);
+  // a.setAttribute("class","btn btn-secondary");
+  a.innerHTML="click here"
+  div.appendChild(a);
+  // div.style.border = "thin solid #00FFFF"
+  div.setAttribute("class","card");
+  // a.appendChild(div);
+  document.getElementById("all_post").appendChild(div);
 }
 
 function create_post(a){
@@ -82,6 +88,7 @@ function create_post(a){
   // console.log("aayamein");
   for(i=0;i<keys.length;i++){
     create_post_helper(keys[i],a[keys[i]]);
+    // console.log(keys[i],a[keys[i]]);
 
   }
 }

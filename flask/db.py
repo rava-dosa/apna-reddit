@@ -110,13 +110,13 @@ def get_upvote_downvote_by_post(subreddit=None):
 		Num_likes = 0
 		Num_dislikes = 0
 		try:
-			cur.execute("select count(*) as post_liked from post_liked where post_id='{}' group by post_id".format(i[0]))
+			cur.execute("select count(*) as post_liked from post_liked where post_id='{}' group by post_id".format(i))
 			Num_likes = cur.fetchone()[0]
 		except:
 			pass
 		
 		try:
-			cur.execute("select count(*) as post_disliked from post_disliked where post_id='{}' group by post_id".format(i[0]))
+			cur.execute("select count(*) as post_disliked from post_disliked where post_id='{}' group by post_id".format(i))
 			Num_dislikes = cur.fetchone()[0]
 		except:
 			pass

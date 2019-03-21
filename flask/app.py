@@ -286,7 +286,7 @@ def get_all_dislikes_user():
         return C_P_disliked
 
 
-@app.route("/get/Post_comments_count")
+@app.route("/get/Post_comments_count_user")
 def get_comment_post_count():
     head = request.headers
     user_id = gu1(head["cookie123"])

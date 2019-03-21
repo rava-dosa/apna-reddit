@@ -87,7 +87,7 @@ cookie=getCookie("Login_cookie");
 $(document).on("click","#upvote",function(){
 	var id = $(this).closest("div").prop("id");
 	// background-color: ;
-	$(this).attr("color","#4CAF50")
+	$(this).css("background","#4CAF50")
 	var data1={"comment_id":id};
 	ajaxy=post1(parent_url+"comment_liked",data1)
 	ajaxy.always(function(){
@@ -98,7 +98,7 @@ $(document).on("click","#upvote",function(){
 
 $(document).on("click","#downvote",function(){
 	var id = $(this).closest("div").prop("id");
-	$(this).attr("color","#4CAF50")
+	$(this).css("background","red")
 	var data1={"comment_id":id};
 	ajaxy=post1(parent_url+"comment_disliked",data1)
 	ajaxy.always(function(){

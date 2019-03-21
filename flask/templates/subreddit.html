@@ -8,9 +8,13 @@
 </head>
 <body>
 	<!-- <input id="post_id"/> -->
-	<label>Create new post </label>
-	<textarea rows="4" cols="40" id="post_id" class="form-control"></textarea>
-	<button id="post_btn" type="button" class="btn btn-primary">Submit</button>
+	<div class="form-group text-center">
+		<label for="post_id" class="text-white">Create new post </label>
+		<textarea rows="4" cols="40" id="post_id" class="form-control w-50 mx-auto"></textarea>
+		<!-- <div class="col text-center mb-2"> -->
+			<button id="post_btn" type="button" class="btn btn-primary text-center">Submit</button>
+		<!-- </div> -->
+	</div>
 	<div id="all_post"></div>
 	<script src="/static/subreddit.js"></script>
 </body>

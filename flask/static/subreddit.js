@@ -61,7 +61,7 @@ function create_post_helper(key,a){
   // var a= document.createElement("a");
   // a.setAttribute("href",parent_url+"post/"+key)
   var para = document.createElement("P");
-  para.setAttribute("class","h2");
+  para.setAttribute("class","h4");
   var para1 = document.createElement("P");
   para1.innerHTML="Upvotes: "+a["likes"]+" Dislikes: "+a["dislikes"]
   console.log(a);
@@ -75,10 +75,13 @@ function create_post_helper(key,a){
   var a= document.createElement("a");
   a.setAttribute("href",parent_url+"post/"+key);
   // a.setAttribute("class","btn btn-secondary");
-  a.innerHTML="click here"
+  a.innerHTML="See discussion"
   div.appendChild(a);
   // div.style.border = "thin solid #00FFFF"
-  div.setAttribute("class","card");
+  div.setAttribute("class","card text-center mb-2 mt-2 mx-auto");
+  div.style="width: 50rem;";
+  // div.setAttribute("margin","10px");
+  // div.setAttribute("flex-flow","column wrap");
   // a.appendChild(div);
   document.getElementById("all_post").appendChild(div);
 }
@@ -106,4 +109,5 @@ ajaxy.always(function(jqXHR,xhr,data,response){
 var x = window.location.href;
 var x0 = x.split("/");
 // console.log(x0[4]);
+document.body.style.backgroundColor = "#4d4d4d";
 foo("http://localhost:5000/r_render/"+x0[4])

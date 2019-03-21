@@ -45,25 +45,35 @@ function cc_helper(id1,text1,upvote,downvote){
   var para = document.createElement("P");
   var t = document.createTextNode(text1);
   para.appendChild(t);
+  para.setAttribute("class","h5 p-2");
   var ubtn = document.createElement("button");
   ubtn.setAttribute("id","upvote")
+  ubtn.setAttribute("class","btn btn-outline-primary col-1 ml-5");
   // ubtn.setAttribute("type","button")
   // ubtn.setAttribute("onclick","u()")
   ubtn.innerHTML="upvote: "+upvote;
   var dbtn = document.createElement("button");
   dbtn.setAttribute("id","downvote")
+  dbtn.setAttribute("class","btn btn-outline-primary col-1 ml-2");
   // dbtn.setAttribute("onclick","d()")
   dbtn.innerHTML="downvote: "+downvote;
   var reply = document.createElement("button");
   reply.setAttribute("id","reply")
+  reply.setAttribute("class","btn btn-outline-primary col-1 ml-2");
   reply.innerHTML="reply"
   var div1=document.createElement("div");
-  div1.setAttribute("id", id1);
+  div1.setAttribute("id", id1+"y");
+  var div2=document.createElement("div");
+  div2.setAttribute("id",id1);
   div1.appendChild(para);
-  div1.appendChild(ubtn); 
-  div1.appendChild(dbtn);
-  div1.appendChild(reply);
+  div2.appendChild(ubtn); 
+  div2.appendChild(dbtn);
+  div2.appendChild(reply);
+  div1.setAttribute("class","card mb-2 ml-5");
+  div1.appendChild(div2);
   div1.style.border = "thick solid #00FFFF"
+  div1.style="width: 100rem;";
+  div1.style.backgroundColor = "#d8d8d8";
   document.getElementById("comments").appendChild(div1);
 }
 
@@ -71,26 +81,38 @@ function cc_helper_post(id1,text1,upvote,downvote){
   var para = document.createElement("P");
   var t = document.createTextNode(text1);
   para.appendChild(t);
+  para.setAttribute("class","h4 p-2");
   var ubtn = document.createElement("button");
   ubtn.setAttribute("id","upvote_post")
+  ubtn.setAttribute("class","btn btn-outline-primary col-1 ml-3");
   // ubtn.setAttribute()
   // ubtn.setAttribute("type","button")
   // ubtn.setAttribute("onclick","u()")
   ubtn.innerHTML="upvote: "+upvote;
   var dbtn = document.createElement("button");
   dbtn.setAttribute("id","downvote_post")
+  dbtn.setAttribute("class","btn btn-outline-primary col-1 ml-2");
+
   // dbtn.setAttribute("onclick","d()")
   dbtn.innerHTML="downvote: "+downvote;
   var reply = document.createElement("button");
   reply.setAttribute("id","reply_post")
+  reply.setAttribute("class","btn btn-outline-primary col-1 ml-2");
   reply.innerHTML="reply"
   var div1=document.createElement("div");
-  div1.setAttribute("id", id1);
+  // div1.setAttribute("class","card mb-2 mt-2 mx-auto");
+  var div2=document.createElement("div");
+  div2.setAttribute("class","row");
+  div2.setAttribute("id",id1);
+  div1.setAttribute("id", id1+"y");
   div1.appendChild(para);
-  div1.appendChild(ubtn); 
-  div1.appendChild(dbtn);
-  div1.appendChild(reply);
-  div1.style.border = "thick solid #00FFFF"
+  div2.appendChild(ubtn); 
+  div2.appendChild(dbtn);
+  div2.appendChild(reply);
+  div1.appendChild(div2);
+  // div1.style.border = "thick solid #00FFFF"
+  div1.setAttribute("class","card mb-2 ml-3");
+  div1.style="width: 100rem;";
   document.getElementById("post").appendChild(div1);
 }
 function create_textbox(parent_id){
@@ -174,6 +196,24 @@ $(document).on("click","#reply_post",function(){
   
 });
 
+$(document).on("click","#reply",function(){
+  var test=document.getElementById("replybox");
+  if(test != null){
+    test.remove();
+  }
+  var id = $(this).closest("div").prop("id");
+  create_textbox(id);
+  $(document).on("click","#replyon",function(){
+    text=document.getElementById("myText").value;
+    var data1={"parent_id":id,"comment_content":text,"post_id":post_id};
+    ajaxy1=post1(parent_url+"comment",data1)
+    ajaxy1.always(function(){
+      console.log(ajaxy1);
+    })
+  })
+  
+});
+
 function get_post(){
   dic1={"post_id":post_id};
   ajaxy=post1(parent_url+"get/post_ka_data",dic1);
@@ -203,6 +243,8 @@ function get_comments(){
     console.log(ret);
   })
 }
-
+// body=document.getElementsByTagName("BODY")[0]; 
+// body.setAttribute("backgroundColor","#4d4d4d");
+document.body.style.backgroundColor = "#4d4d4d";
 get_comments();
 get_post();

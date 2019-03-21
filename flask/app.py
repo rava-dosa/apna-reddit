@@ -26,6 +26,10 @@ from db import get_all_dislikes_by_user as gadlbu
 from db import get_cmt_ld_count_of_post_by_user as gcldcopbu
 from db import get_post_data
 from db import get_comment_data
+from db import check_sub
+from db import SUBSCRIBE
+from db import UNSUBSCRIBE
+
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -290,7 +294,6 @@ def get_all_dislikes_user():
         C_P_disliked = json.dumps(C_P_disliked)
         return C_P_disliked
 
-
 @app.route("/get/Post_comments_count_user")
 def get_comment_post_count():
     head = request.headers
@@ -326,8 +329,20 @@ def ret_comment_data():
     retstr=json.dumps(ret)
     return retstr
 
+@app.route("/check_subscription", methods=["POST"])
+def check_subs():
+    req = request.headers
+    cookie = req["cookie123"]
+    user_id = gu1(cookie)
+    if (user_id is None):
+        return "Invaid cookie"
+    else:
+        req = request.form.to_dict()
+        subreddit_name = req["subreddit_name"]
+        ANS = check_sub(user_id,subreddit_name)
+        return ANS
 
-@app.route("/subscribe")
+@app.route("/subscribe", methods=["POST"])
 def subscribe():
     req = request.headers
     cookie = req["cookie123"]
@@ -336,7 +351,27 @@ def subscribe():
         return "Invaid cookie"
     else:
         req = request.form.to_dict()
-        post_id = req["subreddit_name"]
-        subs(user_id)
+        subreddit_name = req["subreddit_name"]
+        ans = SUBSCRIBE(user_id, subreddit_name, datetime.now())
+        if (ans==1):
+            return "success"
+        else:
+            return "ERROR"
+
+@app.route("/unsubscribe", methods=["POST"])
+def unsubscribe():
+    req = request.headers
+    cookie = req["cookie123"]
+    user_id = gu1(cookie)
+    if (user_id is None):
+        return "Invaid cookie"
+    else:
+        req = request.form.to_dict()
+        subreddit_name = req["subreddit_name"]
+        ans = UNSUBSCRIBE(user_id, subreddit_name)
+        if (ans==1):
+            return "success"
+        else:
+            return "ERROR"
 
 app.run(debug=True,threaded=True)

@@ -370,3 +370,35 @@ def get_comment_data(post_id):
 		l.append(temp)
 	return l
 
+def SUBSCRIBE(user_id=None, subreddit_name=None, created_at=None):
+	try:
+		con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+		cur=con.cursor()
+		cur.execute("INSERT into subscribers VALUES(%s,%s,%s)",(subreddit_name, user_id, created_at))
+		con.commit()
+		return 1
+	except:
+		return 0
+
+def UNSUBSCRIBE(user_id=None, subreddit_name=None):
+	try:
+		con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+		cur=con.cursor()
+		cur.execute("DELETE from subscribers where subreddit_name='{}' and user_id='{}'".format(subreddit_name, user_id))
+		con.commit()
+		return 1
+	except:
+		return 0
+
+def check_sub(user_id=None, subreddit_name=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select * from subscribers where user_id='{}' and subreddit_name='{}'".format(user_id, subreddit_name))
+	try:
+		cur.fetchone()[0]
+		con.commit()
+		return "YES"
+	except:
+		con.commit()
+		return "NO"
+

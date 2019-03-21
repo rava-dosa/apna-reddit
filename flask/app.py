@@ -16,6 +16,7 @@ from db import get_comment_liked as gcl1
 from db import get_comment_disliked as gcdl1
 from db import get_post as gp2
 from db import create_subreddit as cs1
+from db import get_subreddit as gs1
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -205,6 +206,43 @@ def get_all_posts(sub_reddit):
 @app.route("/r/<sub_reddit>")
 def r_subreddits(sub_reddit):
     return render_template("subreddit.html")
+
+@app.route("/profile")
+def profile_template():
+    return render_template("profile.html")
+
+@app.route("/get/all_subreddit")
+def get_all_subreddit():
+    ret=gs1()
+    str1=json.dumps(ret)
+    return str1
+
+@app.route("/get/all_comment")
+def get_all_comment():
+    head=request.headers
+    if(gu1(head["cookie123"]) is not None):
+        print("found you")
+        return "Success"
+    else:
+        return "failure"
+
+@app.route("/get/all_likes")
+def get_all_likes():
+    head=request.headers
+    if(gu1(head["cookie123"]) is not None):
+        print("found you")
+        return "Success"
+    else:
+        return "failure"
+
+@app.route("/get/all_dislikes")
+def get_all_dislikes():
+    head=request.headers
+    if(gu1(head["cookie123"]) is not None):
+        print("found you")
+        return "Success"
+    else:
+        return "failure"
 
 
 app.run(debug=True,threaded=True)

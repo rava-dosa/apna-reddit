@@ -157,3 +157,11 @@ def create_subreddit(name1=None,subreddit_created_at=None,user_id=None):
     cur.execute("INSERT INTO subreddit (name,subreddit_created_at,user_id) VALUES(%s,%s,%s)",(name1,subreddit_created_at,user_id))
     con.commit()
     return 1
+
+def get_subreddit():
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select name,user_id from subreddit order by subreddit_created_at desc");
+	ret=cur.fetchall()
+	con.commit()
+	return ret;

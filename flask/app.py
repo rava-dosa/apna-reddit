@@ -10,6 +10,8 @@ from db import delete_cookie as dc1
 from db import insert_comment as icm
 from db import insert_cmt_liked as icml
 from db import insert_cmt_disliked as icmdl
+from db import insert_post_liked as ipl
+from db import insert_post_disliked as ipdl
 from db import get_upvote_downvote_by_post as gudbp
 from db import get_comment as gc1
 from db import get_comment_liked as gcl1
@@ -134,9 +136,9 @@ def comment_liked():
     if(user_id is None):
         return "Invaid cookie"
     else:
-        comment_id=["comment_id"]
+        req = request.form.to_dict()
+        comment_id = req["comment_id"]
         ret=icml(user_id,comment_id)
-        #WRITE RETURN VALUE
         return "<h1>You Upvoted this comment</h1>"
 
 @app.route("/comment_disliked",methods=["POST"])
@@ -147,11 +149,37 @@ def comment_disliked():
     if(user_id is None):
         return "Invaid cookie"
     else:
-        comment_id=["comment_id"]
+        req = request.form.to_dict()
+        comment_id = req["comment_id"]
         ret=icmdl(user_id,comment_id)
-        #WRITE RETURN VALUE
         return "<h1>You Downvoted this comment</h1>"
 
+
+@app.route("/post_liked",methods=["POST"])
+def post_liked():
+    req=request.headers
+    cookie=req["cookie123"]
+    user_id=gu1(cookie)
+    if(user_id is None):
+        return "Invaid cookie"
+    else:
+        req = request.form.to_dict()
+        comment_id = req["comment_id"]
+        ret=ipl(user_id,comment_id)
+        return "<h1>You Upvoted this post</h1>"
+
+@app.route("/post_disliked",methods=["POST"])
+def post_disliked():
+    req = request.headers
+    cookie = req["cookie123"]
+    user_id = gu1(cookie)
+    if(user_id is None):
+        return "Invaid cookie"
+    else:
+        req = request.form.to_dict()
+        comment_id = req["comment_id"]
+        ret=ipdl(user_id,comment_id)
+        return "<h1>You Downvoted this post</h1>"
 
 @app.route("/testcomment")
 def test_comment():
@@ -223,32 +251,33 @@ def get_all_subreddit():
     str1=json.dumps(ret)
     return str1
 
-@app.route("/get/all_comment")
+@app.route("/get/all_comment_user")
 def get_all_comment():
+    # return comment text,commentid and post id.
     head=request.headers
-    if(gu1(head["cookie123"]) is not None):
-        print("found you")
-        return "Success"
-    else:
+    user_id = gu1(head["cookie123"])
+    if(user_id is None):
         return "failure"
+    else:
+        # req = request.form.to_dict()
+        return "success"
 
-@app.route("/get/all_likes")
+@app.route("/get/all_likes_user")
 def get_all_likes():
+    #return if (comment like) then comment and post id and comment text,
+    # if post like then post text, post id
     head=request.headers
-    if(gu1(head["cookie123"]) is not None):
-        print("found you")
-        return "Success"
-    else:
+    if(gu1(head["cookie123"]) is None):
         return "failure"
-
-@app.route("/get/all_dislikes")
+    else:
+        return "success"
+    
+@app.route("/get/all_dislikes_user")
 def get_all_dislikes():
     head=request.headers
-    if(gu1(head["cookie123"]) is not None):
-        print("found you")
-        return "Success"
-    else:
+    if(gu1(head["cookie123"]) is None):
         return "failure"
-
+    else:
+        return "success"
 
 app.run(debug=True,threaded=True)

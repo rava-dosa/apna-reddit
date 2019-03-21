@@ -10,12 +10,22 @@ from db import delete_cookie as dc1
 from db import insert_comment as icm
 from db import insert_cmt_liked as icml
 from db import insert_cmt_disliked as icmdl
+from db import insert_post_liked as ipl
+from db import insert_post_disliked as ipdl
 from db import get_upvote_downvote_by_post as gudbp
 from db import get_comment as gc1
 from db import get_comment_liked as gcl1
 from db import get_comment_disliked as gcdl1
 from db import get_post as gp2
 from db import create_subreddit as cs1
+from db import get_subreddit as gs1
+from db import insert_post as ip1
+from db import get_all_comments_by_user as gacbu
+from db import get_all_likes_by_user as galbu
+from db import get_all_dislikes_by_user as gadlbu
+from db import get_cmt_ld_count_of_post_by_user as gcldcopbu
+from db import get_post_data
+from db import get_comment_data
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -44,7 +54,6 @@ def hello():
     print(req["podu"])
     return "<h2>jQuery and AJAX is FUN!</h2>"
 
-
 @app.route("/testreg")
 def test_reg():
     return render_template('registration.html')
@@ -54,13 +63,18 @@ def test_reg():
 def Post_cmnt():
     return render_template('create_post.html')
 
-@app.route("/createpost",methods=['GET', 'POST'])
+@app.route("/createpost",methods=['POST'])
 def recv_post_cmnt():
-    if (request.method == 'POST'):
-        # import pdb;pdb.set_trace()
-        req=request.form.to_dict()
-        print(req["post"])
-        return "<h>Apoorva</h>"
+    req=request.form.to_dict()
+    postid=str(uuid1())
+    created_at=datetime.now()
+    content=req["post"]
+    user_id=gu1(request.headers["cookie123"])
+    subreddit_name=req["subreddit"]
+    if(user_id is not None):
+        ret=ip1(postid,content,created_at,user_id,subreddit_name)
+        return ret
+    return "<h>Failure</h>"
 
 @app.route("/login",methods=['POST'])
 def login():
@@ -98,21 +112,21 @@ def get_username():
     else:
         return user_id
 
-
 @app.route("/comment",methods=["POST"])
 def comment():
-    req=request.headers
-    cookie=req["cookie123"]
+    req1=request.headers
+    cookie=req1["cookie123"]
     user_id=gu1(cookie)
     if(user_id is None):
-        return "Invaid cookie"
+        return "Invalid cookie"
     else:
        # comment_id=req["comment_id"]
        #COMMENT ID TO BE CREATED BY HASH OF PARENT ID AND TIMESTAMP
+        req=request.form.to_dict()
         comment_content=req["comment_content"]
         # created_at=str(datetime.now())
         created_at=datetime.now()
-        comment_id=hashlib.sha256(created_at)
+        comment_id=str(uuid1())
         parent_id=req["parent_id"]
         post_id=req["post_id"]
         ret=icm(comment_id,user_id,comment_content,created_at,parent_id,post_id)
@@ -127,9 +141,9 @@ def comment_liked():
     if(user_id is None):
         return "Invaid cookie"
     else:
-        comment_id=["comment_id"]
+        req = request.form.to_dict()
+        comment_id = req["comment_id"]
         ret=icml(user_id,comment_id)
-        #WRITE RETURN VALUE
         return "<h1>You Upvoted this comment</h1>"
 
 @app.route("/comment_disliked",methods=["POST"])
@@ -140,11 +154,36 @@ def comment_disliked():
     if(user_id is None):
         return "Invaid cookie"
     else:
-        comment_id=["comment_id"]
+        req = request.form.to_dict()
+        comment_id = req["comment_id"]
         ret=icmdl(user_id,comment_id)
-        #WRITE RETURN VALUE
         return "<h1>You Downvoted this comment</h1>"
 
+@app.route("/post_liked",methods=["POST"])
+def post_liked():
+    req=request.headers
+    cookie=req["cookie123"]
+    user_id=gu1(cookie)
+    if(user_id is None):
+        return "Invaid cookie"
+    else:
+        req = request.form.to_dict()
+        comment_id = req["post_id"]
+        ret=ipl(user_id,comment_id)
+        return "<h1>You Upvoted this post</h1>"
+
+@app.route("/post_disliked",methods=["POST"])
+def post_disliked():
+    req = request.headers
+    cookie = req["cookie123"]
+    user_id = gu1(cookie)
+    if(user_id is None):
+        return "Invaid cookie"
+    else:
+        req = request.form.to_dict()
+        comment_id = req["post_id"]
+        ret=ipdl(user_id,comment_id)
+        return "<h1>You Downvoted this post</h1>"
 
 @app.route("/testcomment")
 def test_comment():
@@ -206,5 +245,83 @@ def get_all_posts(sub_reddit):
 def r_subreddits(sub_reddit):
     return render_template("subreddit.html")
 
+@app.route("/profile")
+def profile_template():
+    return render_template("profile.html")
+
+@app.route("/get/all_subreddit")
+def get_all_subreddit():
+    ret=gs1()
+    str1=json.dumps(ret)
+    return str1
+
+@app.route("/get/all_comment_user")
+def get_all_comment_user():
+    head=request.headers
+    user_id = gu1(head["cookie123"])
+    if(user_id is None):
+        return "failure"
+    else:
+        req = request.form.to_dict()
+        ans = gacbu(user_id)
+        return str(ans)
+
+@app.route("/get/all_likes_user")
+def get_all_likes_user():
+    head = request.headers
+    if(gu1(head["cookie123"]) is None):
+        return "failure"
+    else:
+        req = request.form.to_dict()
+        C_P_liked = galbu(user_id)
+        C_P_liked = json.dumps(C_P_liked)
+        return C_P_liked
+
+@app.route("/get/all_dislikes_user")
+def get_all_dislikes_user():
+    head = request.headers
+    if(gu1(head["cookie123"]) is None):
+        return "failure"
+    else:
+        req = request.form.to_dict()
+        C_P_disliked = gadlbu(user_id)
+        C_P_disliked = json.dumps(C_P_disliked)
+        return C_P_disliked
+
+
+@app.route("/get/Post_comments_count_user")
+def get_comment_post_count():
+    head = request.headers
+    user_id = gu1(head["cookie123"])
+    if( user_id is None):
+        return "failure"
+    else:
+        req = request.form.to_dict()
+        post_id = req["post_id"]
+        ANS = gcldcopbu(user_id,post_id)
+        ANS = json.dumps(ANS)
+        return ANS
+
+@app.route("/post/<postid>")
+def render_post(postid):
+    return render_template("post.html")
+
+@app.route("/get/post_ka_data",methods=["POST"])
+def ret_post_data():
+    req=request.form.to_dict()
+    post_id=req["post_id"]
+    ret=get_post_data(post_id)
+    retstr=json.dumps(ret)
+    # print(retstr)
+    return retstr
+
+@app.route("/get/comment_ka_data",methods=["POST"])
+def ret_comment_data():
+    req=request.form.to_dict()
+    post_id=req["post_id"]
+    # import pdb;pdb.set_trace()
+    ret=get_comment_data(post_id)
+    retstr=json.dumps(ret)
+    return retstr
 
 app.run(debug=True,threaded=True)

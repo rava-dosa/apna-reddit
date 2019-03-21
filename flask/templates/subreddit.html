@@ -3,9 +3,14 @@
 <head>
 	<meta charset="utf-8"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<title>Subreddit</title>
 </head>
 <body>
-	<div id="comments"></div>
+	<!-- <input id="post_id"/> -->
+	<label>Create new post </label>
+	<textarea rows="4" cols="40" id="post_id" class="form-control"></textarea>
+	<button id="post_btn" type="button" class="btn btn-primary">Submit</button>
+	<div id="all_post"></div>
 	<script src="/static/subreddit.js"></script>
 </body>

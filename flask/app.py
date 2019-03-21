@@ -23,6 +23,7 @@ from db import insert_post as ip1
 from db import get_all_comments_by_user as gacbu
 from db import get_all_likes_by_user as galbu
 from db import get_all_dislikes_by_user as gadlbu
+from db import get_cmt_ld_count_of_post_by_user as gcldcopbu
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -50,7 +51,6 @@ def hello():
     req=request.form.to_dict()
     print(req["podu"])
     return "<h2>jQuery and AJAX is FUN!</h2>"
-
 
 @app.route("/testreg")
 def test_reg():
@@ -110,7 +110,6 @@ def get_username():
     else:
         return user_id
 
-
 @app.route("/comment",methods=["POST"])
 def comment():
     req=request.headers
@@ -156,7 +155,6 @@ def comment_disliked():
         comment_id = req["comment_id"]
         ret=icmdl(user_id,comment_id)
         return "<h1>You Downvoted this comment</h1>"
-
 
 @app.route("/post_liked",methods=["POST"])
 def post_liked():
@@ -286,5 +284,19 @@ def get_all_dislikes_user():
         C_P_disliked = gadlbu(user_id)
         C_P_disliked = json.dumps(C_P_disliked)
         return C_P_disliked
+
+
+@app.route("/get/Post_comments_count")
+def get_comment_post_count():
+    head = request.headers
+    user_id = gu1(head["cookie123"])
+    if( user_id is None):
+        return "failure"
+    else:
+        req = request.form.to_dict()
+        post_id = req["post_id"]
+        ANS = gcldcopbu(user_id,post_id)
+        ANS = json.dumps(ANS)
+        return ANS
 
 app.run(debug=True,threaded=True)

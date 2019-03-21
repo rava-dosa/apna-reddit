@@ -278,3 +278,50 @@ def get_all_dislikes_by_user(user_id=None):
 	ANS["posts_disliked"]=ans2
 	con.commit()
 	return ANS
+
+
+def get_cmt_ld_count_of_post_by_user(user_id=None, post_id=None):
+	con = psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur = con.cursor()
+	ANS = dict()
+	p_liked = 0
+	p_disliked = 0
+	# Post_Num_likes = 0
+	# Post_Num_dislikes = 0
+	try:
+		cur.execute("select * from post_liked where user_id='{}' and post_id='{}'".format(user_id, post_id))
+		cur.fetchone()[0]
+		p_liked = 1
+	except:
+		p_liked = 0
+
+	try:
+		cur.execute("select * from post_disliked where user_id='{}' and post_id='{}'".format(user_id, post_id))
+		cur.fetchone()[0]
+		p_disliked = 1 
+	except:
+		p_disliked = 0
+
+	ANS["has_liked_post"] = p_liked
+	ANS["has_disliked_post"] = p_disliked
+	ANS["cmt_liked"] = []
+	ANS["cmt_disliked"] = []
+
+	try:
+		cur.execute("select C.comment_id from cmt_liked as CL, comment as C where CL.comment_id=C.comment_id and C.post_id='{}' and CL.user_id='{}'".format(post_id, user_id))		
+		res = cur.fetchall()
+		print(res)
+		ANS["cmt_liked"] = res
+	except:
+		pass
+
+	try:
+		cur.execute("select C.comment_id from cmt_disliked as CL, comment as C where CL.comment_id=C.comment_id and C.post_id='{}' and CL.user_id='{}'".format(post_id, user_id))
+		res = cur.fetchall()
+		print(res)
+		ANS["cmt_disliked"] = res
+	except:
+		pass
+
+	con.commit()
+	return ANS

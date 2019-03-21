@@ -302,6 +302,7 @@ def get_comment_post_count():
         ANS = json.dumps(ANS)
         return ANS
 
+<<<<<<< Updated upstream
 @app.route("/post/<postid>")
 def render_post(postid):
     return render_template("post.html")
@@ -324,4 +325,15 @@ def ret_comment_data():
     retstr=json.dumps(ret)
     return retstr
 
+
+@app.route("/subscribe")
+def subscribe():
+    req = request.headers
+    cookie = req["cookie123"]
+    user_id = gu1(cookie)
+    if (user_id is None):
+        return "Invaid cookie"
+    else:
+        return user_id
+        
 app.run(debug=True,threaded=True)

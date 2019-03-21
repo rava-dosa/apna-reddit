@@ -11,5 +11,6 @@ cur.execute("CREATE table if not exists comment(comment_id text primary key, use
 cur.execute("CREATE table if not exists cookie(user_id text references user1(user_id), cookie text, primary key(user_id, cookie));")
 cur.execute("CREATE table if not exists cmt_liked(user_id text references user1(user_id), comment_id text references comment(comment_id), primary key(user_id, comment_id));")
 cur.execute("CREATE table if not exists cmt_disliked(user_id text references user1(user_id), comment_id text references comment(comment_id), primary key(user_id, comment_id));")
+cur.execute("CREATE table if not exists subscribers(subreddit_name text references subreddit(name), user_id text references user1(user_id), created_at timestamp, primary key(subreddit_name, user_id));")
 conn.commit()
 

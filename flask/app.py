@@ -264,12 +264,13 @@ def get_all_comment_user():
     else:
         req = request.form.to_dict()
         ans = gacbu(user_id)
-        return str(ans)
+        return json.dumps(ans)
 
 @app.route("/get/all_likes_user")
 def get_all_likes_user():
     head = request.headers
-    if(gu1(head["cookie123"]) is None):
+    user_id = gu1(head["cookie123"])
+    if(user_id is None):
         return "failure"
     else:
         req = request.form.to_dict()
@@ -280,7 +281,8 @@ def get_all_likes_user():
 @app.route("/get/all_dislikes_user")
 def get_all_dislikes_user():
     head = request.headers
-    if(gu1(head["cookie123"]) is None):
+    user_id = gu1(head["cookie123"])
+    if(user_id is None):
         return "failure"
     else:
         req = request.form.to_dict()

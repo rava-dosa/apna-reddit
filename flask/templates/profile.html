@@ -7,20 +7,24 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-	<input id="subreddit_id"/>
-	<button id="post_btn_subreddit" type="button" class="btn btn-primary">Create New Subreddit</button>
+	<input id="subreddit_id" class="mt-5 mb-5 ml-5" />
+	<button id="post_btn_subreddit" type="button" class="btn btn-primary mt-5 mb-5">Create New Subreddit</button>
 	<!-- <script src="/static/create_subreddit.js" charset="utf-8"></script> -->
-	<div id="all_subreddit">
-		<p class="h1">All subreddit</p>
-	</div>
-	<div id="all_comment">
-		<p class="h1">All comment</p>
-	</div>
-	<div id="all_likes">
-		<p class="h1">All likes</p>
-	</div>
-	<div id="all_dislikes">
-		<p class="h1">All dislikes</p>
+	<div class="row">
+		<div class="col-9 ml-5">
+			<div id="all_comment" class="border border-primary mb-1 p-3">
+				<p class="h1">All comment</p>
+			</div>
+			<div id="all_likes" class="border border-primary mb-1 p-3">
+				<p class="h1">All likes</p>
+			</div>
+			<div id="all_dislikes" class="border border-primary mb-1 p-3">
+				<p class="h1">All dislikes</p>
+			</div>
+		</div>
+		<div id="all_subreddit" class="col border border-primary p-3">
+			<p class="h1">All subreddit</p>
+		</div>		
 	</div>
 	<script src="/static/create_profile.js" charset="utf-8"></script>
 </body>

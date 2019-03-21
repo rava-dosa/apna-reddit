@@ -24,9 +24,9 @@ def insert_subreddit(name=None,subreddit_created_at=None,user_id=None):
 def insert_post(post_id=None,content=None,post_created_at=None,user_id=None,subreddit_name=None):
     conn = psycopg2.connect(dbname="mydb", user="myuser", password="mypass",host="localhost")
     cur = conn.cursor()
-    cur.execute("INSERT INTO subreddit(post_id,content,post_created_at,user_id,subreddit_name) VALUES(%s,%s,%s,%s,%s)",(post_id,content,post_created_at,user_id,subreddit_name))
+    cur.execute("INSERT INTO post(post_id,content,post_created_at,user_id,subreddit_name) VALUES(%s,%s,%s,%s,%s)",(post_id,content,post_created_at,user_id,subreddit_name))
     conn.commit()
-    return 1
+    return "Success"
 
 def get_password(user_id=None):
     conn = psycopg2.connect(dbname="mydb", user="myuser", password="mypass",host="localhost")

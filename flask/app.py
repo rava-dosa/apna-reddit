@@ -17,6 +17,7 @@ from db import get_comment_disliked as gcdl1
 from db import get_post as gp2
 from db import create_subreddit as cs1
 from db import get_subreddit as gs1
+from db import insert_post as ip1
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
@@ -55,13 +56,18 @@ def test_reg():
 def Post_cmnt():
     return render_template('create_post.html')
 
-@app.route("/createpost",methods=['GET', 'POST'])
+@app.route("/createpost",methods=['POST'])
 def recv_post_cmnt():
-    if (request.method == 'POST'):
-        # import pdb;pdb.set_trace()
-        req=request.form.to_dict()
-        print(req["post"])
-        return "<h>Apoorva</h>"
+    req=request.form.to_dict()
+    postid=str(uuid1())
+    created_at=datetime.now()
+    content=req["post"]
+    user_id=gu1(request.headers["cookie123"])
+    subreddit_name=req["subreddit"]
+    if(user_id is not None):
+        ret=ip1(postid,content,created_at,user_id,subreddit_name)
+        return ret
+    return "<h>Failure</h>"
 
 @app.route("/login",methods=['POST'])
 def login():

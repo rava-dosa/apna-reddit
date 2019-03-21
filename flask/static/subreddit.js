@@ -57,8 +57,34 @@ $(document).ready(function(){
     })
   });
 });
+function create_post_helper(key,a){
+  var a=document.createElement("a");
+  a.setAttribute("href",window.location.href+key);
+  var para = document.createElement("P");
+  para.innerHTML=a["text"];
+  var div= document.createElement("div");
+  div.setAttribute("id",key);
+  // div.setAttribute("borderColor","red");
+  div.style.borderColor ="red";
+  a.appendChild(div);
+  div.appendChild(para);
+  var para1 = document.createElement("P");
+  para1.innerHTML="Upvotes->"+a["likes"]
+  var para2 = document.createElement("P");
+  para2.innerHTML="Downvotes->"+a["dislikes"]
+  div.appendChild(para1);
+  div.appendChild(para2);
+  document.getElementById("all_post").appendChild(a);
+}
 
+function create_post(a){
+  keys=Object.keys(a);
+  // console.log("aayamein");
+  for(i=0;i<keys.length;i++){
+    create_post_helper(keys[i],a[keys[i]]);
 
+  }
+}
 function foo(url1){
 var ajaxy = $.ajax({
 		    	url: url1,
@@ -66,6 +92,7 @@ var ajaxy = $.ajax({
 		    	});
 ajaxy.always(function(jqXHR,xhr,data,response){
 	var a=JSON.parse(ajaxy.responseText);
+	create_post(a);
 });
 }
 

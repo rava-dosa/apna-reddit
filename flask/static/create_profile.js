@@ -58,7 +58,7 @@ function create_hyperlink(parent_div,text,url){
   var aTag = document.createElement('a');
   aTag.setAttribute('href',url);
   // aTag.setAttribute('class',"text-primary");
-  aTag.className = "h3"
+  aTag.className = "h4"
   aTag.innerHTML=text;
   var p = document.createElement('p');
   document.getElementById(parent_div).appendChild(aTag);
@@ -84,28 +84,75 @@ function get_subreddit(){
   // console.log(ajaxy.responseText);
 }
 function get_recent_comment(){
-  url1=parent_url+"get/all_comment";
+  url1=parent_url+"get/all_comment_user";
   var ajaxy=get(url1);
   ajaxy.always(function(){
-    console.log(ajaxy.responseText);
+    retstr=ajaxy.responseText;
+    ret1=JSON.parse(retstr);
+    // console.log(retstr);
+    // console.log(a);
+    // ret=JSON.parse(retstr);
+    // console.log(ret);
+    // ret1=Object.keys(ret);
+    // console.log(ret1);
+    for(i=0;i<ret1.length;i++){
+      TEXT = get_text(ret1[i][2]);
+      create_hyperlink("all_comment",TEXT,parent_url+"comments/"+ret1[i][1]+"/"+ret1[i][0])
+    }
   })
   // ajaxy.always()
   // console.log(ajaxy.responseText);
 }
+function get_text(text){
+  if(text.length > 30){
+    return text.slice(0,30)+" (...)";
+  }
+  return text
+}
 function get_recent_likes(){
-  url1=parent_url+"get/all_likes";
+  url1=parent_url+"get/all_likes_user";
   var ajaxy=get(url1);
   ajaxy.always(function(){
-    console.log(ajaxy.responseText);
+    // console.log(ajaxy.responseText);
+    ret=ajaxy.responseText;
+    retstr=JSON.parse(ret);
+    retkey=Object.keys(retstr);
+      key1="comments_liked";
+      retlist=retstr[key1]
+      for(j=0;j<retlist.length;j++){
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_likes",TEXT,parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
+      }
+      key1="posts_disliked";
+      retlist=retstr[key1]
+      for(j=0;j<retlist.length;j++){
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_likes",TEXT,parent_url+"post/"+retlist[j][0])
+      }
   })
   // ajaxy.always()
   // console.log(ajaxy.responseText);
 }
 function get_recent_dislikes(){
-  url1=parent_url+"get/all_dislikes";
+  url1=parent_url+"get/all_dislikes_user";
   var ajaxy=get(url1);
   ajaxy.always(function(){
     console.log(ajaxy.responseText);
+ret=ajaxy.responseText;
+    retstr=JSON.parse(ret);
+    retkey=Object.keys(retstr);
+    key1="comments_disliked";
+      retlist=retstr[key1]
+      for(j=0;j<retlist.length;j++){
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_dislikes",TEXT,parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
+      }
+      key1="posts_disliked";
+      retlist=retstr[key1]
+      for(j=0;j<retlist.length;j++){
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_dislikes",TEXT,parent_url+"post/"+retlist[j][0])
+      }    
   })
   // ajaxy.always()
   // console.log(ajaxy.responseText);

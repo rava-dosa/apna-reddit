@@ -144,14 +144,17 @@ def get_subreddit():
 def insert_cmt_liked(user_id=None,comment_id=None):
 	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
 	cur=con.cursor()
+	liked = 0
 	try:
 		# Check if like already exist
 		cur.execute("select * from cmt_liked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
 		cur.execute("delete from cmt_liked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		liked = 0
 	except:
 		# otherwise insert into table
 		cur.execute("INSERT INTO cmt_liked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+		liked = 1
 	try:
 		# Check if dislike already exist then remove it
 		cur.execute("select * from cmt_disliked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
@@ -160,19 +163,22 @@ def insert_cmt_liked(user_id=None,comment_id=None):
 	except:
 		pass
 	con.commit()
-	return 1
+	return liked
 
 def insert_cmt_disliked(user_id=None,comment_id=None):
 	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
 	cur=con.cursor()
+	disliked = 0
 	try:
 		# Check if dislike already exist
 		cur.execute("select * from cmt_disliked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
 		cur.execute("delete from cmt_disliked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
+		disliked = 0
 	except:
 		# otherwise insert into table
 		cur.execute("INSERT INTO cmt_disliked(user_id,comment_id) VALUES(%s,%s)",(user_id,comment_id))
+		disliked = 1
 	try:
 		# Check if like already exist then remove it
 		cur.execute("select * from cmt_liked where user_id='{}' and comment_id='{}'".format(user_id, comment_id))	
@@ -181,19 +187,22 @@ def insert_cmt_disliked(user_id=None,comment_id=None):
 	except:
 		pass
 	con.commit()
-	return 1
+	return disliked
 
 def insert_post_liked(user_id=None, comment_id=None):
 	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
 	cur=con.cursor()
+	liked = 0
 	try:
 		# Check if like already exist
 		cur.execute("select * from post_liked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
 		cur.execute("delete from post_liked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
+		liked = 0
 	except:
 		# otherwise insert into table
 		cur.execute("INSERT INTO post_liked(user_id,post_id) VALUES(%s,%s)",(user_id,comment_id))
+		liked = 1
 	try:
 		# Check if dislike already exist then remove it
 		cur.execute("select * from post_disliked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
@@ -202,19 +211,22 @@ def insert_post_liked(user_id=None, comment_id=None):
 	except:
 		pass
 	con.commit()
-	return 1
+	return liked
 
 def insert_post_disliked(user_id=None, comment_id=None):
 	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
 	cur=con.cursor()
+	disliked = 0
 	try:
 		# Check if dislike already exist
 		cur.execute("select * from post_disliked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
 		cur.fetchone()[0]
 		cur.execute("delete from post_disliked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
+		disliked = 0
 	except:
 		# otherwise insert into table
 		cur.execute("INSERT INTO post_disliked(user_id,post_id) VALUES(%s,%s)",(user_id,comment_id))
+		disliked = 1
 	try:
 		# Check if like already exist then remove it
 		cur.execute("select * from post_liked where user_id='{}' and post_id='{}'".format(user_id, comment_id))	
@@ -223,7 +235,7 @@ def insert_post_disliked(user_id=None, comment_id=None):
 	except:
 		pass
 	con.commit()
-	return 1
+	return disliked
 
 def get_all_comments_by_user(user_id=None):
 	con = psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
@@ -370,3 +382,34 @@ def get_comment_data(post_id):
 		l.append(temp)
 	return l
 
+def SUBSCRIBE(user_id=None, subreddit_name=None, created_at=None):
+	try:
+		con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+		cur=con.cursor()
+		cur.execute("INSERT into subscribers VALUES(%s,%s,%s)",(subreddit_name, user_id, created_at))
+		con.commit()
+		return 1
+	except:
+		return 0
+
+def UNSUBSCRIBE(user_id=None, subreddit_name=None):
+	try:
+		con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+		cur=con.cursor()
+		cur.execute("DELETE from subscribers where subreddit_name='{}' and user_id='{}'".format(subreddit_name, user_id))
+		con.commit()
+		return 1
+	except:
+		return 0
+
+def check_sub(user_id=None, subreddit_name=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select * from subscribers where user_id='{}' and subreddit_name='{}'".format(user_id, subreddit_name))
+	try:
+		cur.fetchone()[0]
+		con.commit()
+		return "YES"
+	except:
+		con.commit()
+		return "NO"

@@ -96,11 +96,18 @@ function get_recent_comment(){
     // ret1=Object.keys(ret);
     // console.log(ret1);
     for(i=0;i<ret1.length;i++){
-      create_hyperlink("all_comment",ret1[i][2].slice(0,30),parent_url+"comments/"+ret1[i][1]+"/"+ret1[i][0])
+      TEXT = get_text(ret1[i][2]);
+      create_hyperlink("all_comment",TEXT,parent_url+"comments/"+ret1[i][1]+"/"+ret1[i][0])
     }
   })
   // ajaxy.always()
   // console.log(ajaxy.responseText);
+}
+function get_text(text){
+  if(text.length > 30){
+    return text.slice(0,30)+" (...)";
+  }
+  return text
 }
 function get_recent_likes(){
   url1=parent_url+"get/all_likes_user";
@@ -113,12 +120,14 @@ function get_recent_likes(){
       key1="comments_liked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
-        create_hyperlink("all_likes",retlist[j][1].slice(0,30),parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_likes",TEXT,parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
       }
       key1="posts_disliked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
-        create_hyperlink("all_likes",retlist[j][1].slice(0,30),parent_url+"post/"+retlist[j][0])
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_likes",TEXT,parent_url+"post/"+retlist[j][0])
       }
   })
   // ajaxy.always()
@@ -135,12 +144,14 @@ ret=ajaxy.responseText;
     key1="comments_disliked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
-        create_hyperlink("all_dislikes",retlist[j][1].slice(0,30),parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_dislikes",TEXT,parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
       }
       key1="posts_disliked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
-        create_hyperlink("all_dislikes",retlist[j][1].slice(0,30),parent_url+"post/"+retlist[j][0])
+        TEXT = get_text(retlist[j][1]);
+        create_hyperlink("all_dislikes",TEXT,parent_url+"post/"+retlist[j][0])
       }    
   })
   // ajaxy.always()

@@ -87,6 +87,7 @@ function create_post_helper(key,a){
 }
 
 function create_post(a){
+  console.log(a);
   keys=Object.keys(a);
   // console.log("aayamein");
   for(i=0;i<keys.length;i++){
@@ -170,5 +171,5 @@ var x = window.location.href;
 var x0 = x.split("/");
 // console.log(x0[4]);
 document.body.style.backgroundColor = "#4d4d4d";
-foo("http://localhost:5000/r_render/"+x0[4])
-check_subs()
+foo("http://localhost:5000/r_render/"+x0[4]);
+check_subs();

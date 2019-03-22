@@ -147,8 +147,8 @@ def comment_liked():
     else:
         req = request.form.to_dict()
         comment_id = req["comment_id"]
-        ret=icml(user_id,comment_id)
-        return "<h1>You Upvoted this comment</h1>"
+        ret = icml(user_id,comment_id)
+        return str(ret)
 
 @app.route("/comment_disliked",methods=["POST"])
 def comment_disliked():
@@ -160,8 +160,8 @@ def comment_disliked():
     else:
         req = request.form.to_dict()
         comment_id = req["comment_id"]
-        ret=icmdl(user_id,comment_id)
-        return "<h1>You Downvoted this comment</h1>"
+        ret = icmdl(user_id,comment_id)
+        return str(ret)
 
 @app.route("/post_liked",methods=["POST"])
 def post_liked():
@@ -174,7 +174,7 @@ def post_liked():
         req = request.form.to_dict()
         comment_id = req["post_id"]
         ret=ipl(user_id,comment_id)
-        return "<h1>You Upvoted this post</h1>"
+        return str(ret)
 
 @app.route("/post_disliked",methods=["POST"])
 def post_disliked():
@@ -187,7 +187,7 @@ def post_disliked():
         req = request.form.to_dict()
         comment_id = req["post_id"]
         ret=ipdl(user_id,comment_id)
-        return "<h1>You Downvoted this post</h1>"
+        return str(ret)
 
 @app.route("/testcomment")
 def test_comment():
@@ -205,16 +205,29 @@ def dummyjson():
 @app.route("/comments/<postid>/<commentid>")
 def testapi_random(postid,commentid):
     # import pdb;pdb.set_trace();
-    post=gp2(postid)
-    comment=gc1(commentid)
-    comment_liked=gcl1(commentid)
-    comment_disliked=gcdl1(commentid)
-    num_of_upvotes=len(comment_liked)
-    num_of_downvotes=len(comment_disliked)
-    total_like=num_of_upvotes-num_of_downvotes
-    dic={"post":post[0][0],"upvote":num_of_upvotes,"downvote":num_of_downvotes,"comment":comment[0][0],"post_id":postid,"comment_id":commentid}
-    dump=json.dumps(dic)
-    return dump
+    return render_template("a_comment.html")
+
+@app.route("/get_a_comment", methods=["POST"])
+def get_a_comm():
+    req=request.headers
+    cookie=req["cookie123"]
+    user_id=gu1(cookie)
+    if(user_id is None):
+        return "Invalid user"
+    else:
+        req = request.form.to_dict()
+        postid = req["postid"]
+        commentid = req["commentid"]
+        post=gp2(postid)
+        comment=gc1(commentid)
+        comment_liked=gcl1(commentid)
+        comment_disliked=gcdl1(commentid)
+        num_of_upvotes=len(comment_liked)
+        num_of_downvotes=len(comment_disliked)
+        total_like=num_of_upvotes-num_of_downvotes
+        dic={"post":post[0][0],"upvote":num_of_upvotes,"downvote":num_of_downvotes,"comment":comment[0][0],"post_id":postid,"comment_id":commentid}
+        dump=json.dumps(dic)
+        return dump
 
 @app.route("/comm/<postid>/<commentid>")
 def testapi_comment(postid,commentid):
@@ -294,7 +307,7 @@ def get_all_dislikes_user():
         C_P_disliked = json.dumps(C_P_disliked)
         return C_P_disliked
 
-@app.route("/get/Post_comments_count_user")
+@app.route("/get/Post_comments_count_user", methods=["POST"])
 def get_comment_post_count():
     head = request.headers
     user_id = gu1(head["cookie123"])

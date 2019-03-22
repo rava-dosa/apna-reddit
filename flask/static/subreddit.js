@@ -87,6 +87,7 @@ function create_post_helper(key,a){
 }
 
 function create_post(a){
+  console.log(a);
   keys=Object.keys(a);
   // console.log("aayamein");
   for(i=0;i<keys.length;i++){
@@ -106,8 +107,69 @@ ajaxy.always(function(jqXHR,xhr,data,response){
 });
 }
 
+function check_subs(){
+  cookie=getCookie("Login_cookie");
+  URL = parent_url+"check_subscription";
+  var x = window.location.href;
+  var x0 = x.split("/");
+  SR_name = x0[4];
+  console.log(SR_name);
+  console.log(URL);
+  ajaxy=$.ajax({
+    url: URL,
+    method: "POST",
+    dataType: "json",
+    headers:{"cookie123":cookie},
+    data: {"subreddit_name":SR_name}
+  });
+  ajaxy.always(function(jqXHR,xhr,data,response){
+    var a=ajaxy.responseText;
+    console.log(a);
+    if(a=="YES"){
+      document.getElementById('subs').innerHTML="UNSUBSCRIBE";
+    }else if(a=="NO"){
+      document.getElementById('subs').innerHTML="SUBSCRIBE";        
+    }
+  });
+}
+
+
+function subs_unsubs(){
+    cookie = getCookie("Login_cookie");
+    URL = parent_url;
+    var x = window.location.href;
+    var x0 = x.split("/");
+    SR_name = x0[4];
+    text = document.getElementById('subs').innerHTML
+    if(text == "UNSUBSCRIBE"){
+      URL = URL + "unsubscribe";
+      
+    }else if(text == "SUBSCRIBE"){
+      URL = URL + "subscribe";
+    }
+    ajaxy=$.ajax({
+      url: URL,
+      method: "POST",
+      dataType: "json",
+      headers:{"cookie123":cookie},
+      data: {"subreddit_name":SR_name}
+    });
+    ajaxy.always(function(jqXHR,xhr,data,response){
+      var a=ajaxy.responseText;
+      console.log(a);
+      if(a =="success"){
+        if(text == "UNSUBSCRIBE"){
+          document.getElementById('subs').innerHTML="SUBSCRIBE";       
+        }else if(text == "SUBSCRIBE"){
+          document.getElementById('subs').innerHTML="UNSUBSCRIBE";
+        }
+      }
+    });
+}
+
 var x = window.location.href;
 var x0 = x.split("/");
 // console.log(x0[4]);
 document.body.style.backgroundColor = "#4d4d4d";
-foo("http://localhost:5000/r_render/"+x0[4])
+foo("http://localhost:5000/r_render/"+x0[4]);
+check_subs();

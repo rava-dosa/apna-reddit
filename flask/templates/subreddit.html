@@ -5,6 +5,30 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<title>Subreddit</title>
+<style>
+.SUBS {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 2px #999;
+}
+
+.SUBS:hover {background-color: #ff0000}
+
+.SUBS:active {
+  background-color: #ff0000;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+</style>
 </head>
 <body>
 	<!-- <input id="post_id"/> -->
@@ -16,5 +40,6 @@
 		<!-- </div> -->
 	</div>
 	<div id="all_post"></div>
+	<button id="subs" type="button" class="SUBS" onclick="subs_unsubs()"></button>
 	<script src="/static/subreddit.js"></script>
 </body>

@@ -302,7 +302,6 @@ def get_comment_post_count():
         ANS = json.dumps(ANS)
         return ANS
 
-<<<<<<< Updated upstream
 @app.route("/post/<postid>")
 def render_post(postid):
     return render_template("post.html")

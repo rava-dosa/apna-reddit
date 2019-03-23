@@ -32,6 +32,11 @@
 </head>
 <body>
 	<!-- <input id="post_id"/> -->
+	<nav class="navbar navbar-light bg-light">
+		<a class="navbar-brand" href="#">{{name}}</a>
+		<a class="navbar-link" href="http://localhost:5000/profile">Your Profile</a>
+		<button id="subs" type="button" onclick="subs_unsubs()"></button>
+	</nav>
 	<div class="form-group text-center">
 		<label for="post_id" class="text-white">Create new post </label>
 		<textarea rows="4" cols="40" id="post_id" class="form-control w-50 mx-auto"></textarea>
@@ -40,6 +45,6 @@
 		<!-- </div> -->
 	</div>
 	<div id="all_post"></div>
-	<button id="subs" type="button" class="SUBS" onclick="subs_unsubs()"></button>
+	<!-- <button id="subs" type="button" onclick="subs_unsubs()"></button> -->
 	<script src="/static/subreddit.js"></script>
 </body>

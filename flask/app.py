@@ -260,7 +260,7 @@ def get_all_posts(sub_reddit):
 
 @app.route("/r/<sub_reddit>")
 def r_subreddits(sub_reddit):
-    return render_template("subreddit.html")
+    return render_template("subreddit.html",name=sub_reddit)
 
 @app.route("/profile")
 def profile_template():

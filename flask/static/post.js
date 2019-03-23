@@ -72,7 +72,7 @@ function cc_helper(id1,text1,upvote,downvote){
   div1.setAttribute("class","card mb-2 ml-5");
   div1.appendChild(div2);
   div1.style.border = "thick solid #00FFFF";
-  div1.style="width: 100rem;";
+  div1.style="width: 98rem;";
   div1.style.backgroundColor = "#d8d8d8";
   document.getElementById("comments").appendChild(div1);
 }
@@ -274,7 +274,7 @@ function color_it(){
       document.getElementById("upvote_post").className="btn btn-primary col-1 ml-3";
     }
     if(Number(retstr["has_disliked_post"])==1){
-      document.getElementById("downvote_post").className="btn btn-primary col-1 ml-3";
+      document.getElementById("downvote_post").className="btn btn-primary col-1 ml-2";
     }
 
     cmt_liked = retstr["cmt_liked"];
@@ -282,14 +282,14 @@ function color_it(){
     console.log(cmt_liked.length);
     for (i=0; i<cmt_liked.length; i++) {
       T = document.getElementById(cmt_liked[i][0]);
-      T.childNodes[0].className="btn btn-primary col-1 ml-3";
+      T.childNodes[0].className="btn btn-primary col-1 ml-5";
     }
     for (i=0; i<cmt_disliked.length; i++) {
       T = document.getElementById(cmt_disliked[i][0]);
-      T.childNodes[1].className="btn btn-primary col-1 ml-3";
+      T.childNodes[1].className="btn btn-primary col-1 ml-2";
     }
   });
 }
 
-document.body.style.backgroundColor = "#4d4d4d";
+document.body.style.backgroundColor = "#C0C0C0";
 get_comments();

@@ -52,6 +52,10 @@ $(document).ready(function(){
     data1={'subreddit_name':txt};
     cookie=getCookie("Login_cookie");
     ajaxy=post1(parent_url+"createsubreddit",data1);
+    ajaxy.always(function(){
+      console.log(ajaxy.responseText);
+       location.reload();
+    })
   });
 });
 function create_hyperlink(parent_div,text,url){
@@ -163,3 +167,4 @@ get_recent_comment();
 get_recent_likes();
 get_recent_dislikes();
 // <a href="url">link text</a>
+document.body.style.backgroundColor = "#F0F0F0";

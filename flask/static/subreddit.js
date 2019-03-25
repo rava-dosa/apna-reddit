@@ -54,6 +54,7 @@ $(document).ready(function(){
     ajaxy=post1(parent_url+"createpost",data1)
     ajaxy.always(function(){
     	console.log(ajaxy.responseText);
+       location.reload();
     })
   });
 });

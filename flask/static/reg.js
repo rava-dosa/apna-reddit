@@ -27,5 +27,9 @@ function REG_SUBMIT() {
         success: function(result){
             console.log(ret1)
       // $("#div1").append(result);
-    }});    
+    }});
+    ajaxy.always(function(){
+        document.getElementById("regform").innerHTML=ajaxy.responseText;
+        window.location = "http://localhost:5000";
+    })    
 }

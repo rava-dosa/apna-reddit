@@ -413,3 +413,12 @@ def check_sub(user_id=None, subreddit_name=None):
 	except:
 		con.commit()
 		return "NO"
+
+def getall_sub(subreddit_name=None):
+	con=psycopg2.connect(dbname="mydb",user="myuser",password="mypass",host="localhost")
+	cur=con.cursor()
+	cur.execute("select U.email_id from subreddit as SR, subscribers as S, user1 as U where S.subreddit_name=SR.name and U.user_id=S.user_id and SR.name='{}'".format(subreddit_name))
+	ret=cur.fetchall()
+	con.commit()
+	# print(ret)
+	return ret

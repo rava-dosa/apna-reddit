@@ -122,16 +122,26 @@ function get_recent_likes(){
     retstr=JSON.parse(ret);
     retkey=Object.keys(retstr);
       key1="comments_liked";
-      retlist=retstr[key1]
-      for(j=0;j<retlist.length;j++){
-        TEXT = get_text(retlist[j][1]);
-        create_hyperlink("all_likes",TEXT,parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
+      try{
+        retlist=retstr[key1]
+        for(j=0;j<retlist.length;j++){
+          TEXT = get_text(retlist[j][1]);
+          create_hyperlink("all_likes",TEXT,parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
+        }
       }
-      key1="posts_disliked";
-      retlist=retstr[key1]
-      for(j=0;j<retlist.length;j++){
-        TEXT = get_text(retlist[j][1]);
-        create_hyperlink("all_likes",TEXT,parent_url+"post/"+retlist[j][0])
+      catch(err){
+        console.log(err);
+      }
+      try{
+        key1="posts_disliked";
+        retlist=retstr[key1]
+        for(j=0;j<retlist.length;j++){
+          TEXT = get_text(retlist[j][1]);
+          create_hyperlink("all_likes",TEXT,parent_url+"post/"+retlist[j][0])
+        }
+      }
+      catch(err){
+        console.log(err);
       }
   })
   // ajaxy.always()
@@ -146,22 +156,37 @@ ret=ajaxy.responseText;
     retstr=JSON.parse(ret);
     retkey=Object.keys(retstr);
     key1="comments_disliked";
+    try{
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
         TEXT = get_text(retlist[j][1]);
         create_hyperlink("all_dislikes",TEXT,parent_url+"comments/"+retlist[j][2]+"/"+retlist[j][0])
       }
+    }
+    catch(err){
+      console.log(err);
+    }
+    try{
       key1="posts_disliked";
       retlist=retstr[key1]
       for(j=0;j<retlist.length;j++){
         TEXT = get_text(retlist[j][1]);
         create_hyperlink("all_dislikes",TEXT,parent_url+"post/"+retlist[j][0])
       }    
+    }
+    catch(err){
+      console.log(err);
+    }
   })
   // ajaxy.always()
   // console.log(ajaxy.responseText);
 }
-
+$(document).on("click","#logout",function(){
+  ajaxqu=post1(parent_url+"logout",{})
+  ajaxqu.always(function(){
+    document.body.innerHTML = ajaxqu.responseText;
+  });
+});
 get_subreddit();
 get_recent_comment();
 get_recent_likes();

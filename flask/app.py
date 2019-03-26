@@ -30,12 +30,21 @@ from db import check_sub
 from db import SUBSCRIBE
 from db import UNSUBSCRIBE
 
+from mail import sendmail
 from datetime import datetime
 from uuid import uuid1
 import hashlib 
 import json
 
+
+import smtplib
+import os
+
 app = Flask(__name__)
+
+s = smtplib.SMTP('iitkgpmail.iitkgp.ac.in', 25)
+password=os.getenv("pass_zimbra")
+s.login("apoorvakumar169@iitkgp.ac.in",password)
 
 @app.route("/")
 def main(name=None):
@@ -77,6 +86,7 @@ def recv_post_cmnt():
     subreddit_name=req["subreddit"]
     if(user_id is not None):
         ret=ip1(postid,content,created_at,user_id,subreddit_name)
+        sendmail(s,subreddit_name,postid)
         return ret
     return "<h>Failure</h>"
 

@@ -22,6 +22,11 @@ function LOGIN() {
     });
     ajaxy.always(function(jqXHR, xhr, data, response){
         recv = jqXHR.responseText;
+        console.log(ajaxy.status);
+        if(ajaxy.status==500){
+            alert("Uername or id wrong");
+            return;
+        }
         var n = recv.search("<h>");
         if(n==-1){
             setCookie("Login_cookie",recv, 1);

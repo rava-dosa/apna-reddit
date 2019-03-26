@@ -3,29 +3,33 @@
 <head>
 	<meta charset="utf-8"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">		
 	<title>Registration</title>
 </head>
 <body>
-<div id="regform">
+	<nav class="navbar navbar-light bg-light mb-3">
+		<a class="navbar-brand" href="http://localhost:5000/">Apna Subreddit: Registration</a>
+	</nav>	
+<div id="regform" class="form-group align-items-center justify-content-center container">
 	Name:</br>
-	<input id="name1" type="text" name="NAME" value="" required><br>
+	<input id="name1"  class="form-control" type="text" name="NAME" value="" required><br>
 	Username:</br>
-	<input id="user1" type="text" name="USERNAME" value="" required><br>
+	<input id="user1"  class="form-control"  type="text" name="USERNAME" value="" required><br>
 	Password:</br>
-	<input id="password1" type="Password" name="PASS" value="" required><br>
+	<input id="password1"  class="form-control"  type="Password" name="PASS" value="" required><br>
 	Email:</br>
-	<input id="email1" type="email" name="EMAIL" value="" required><br>
+	<input id="email1"  class="form-control"  type="email" name="EMAIL" value="" required><br>
 	Date of Birth:</br>
-	<input id="date1" placeholder="yyyy/mm/dd" name="DOB" value="" required><br>
+	<input id="date1"  class="form-control"  placeholder="yyyy/mm/dd" name="DOB" value="" required><br>
 	Phone number:</br>
-	<input id="phone_num1" type="number" name="PHONE_NUM"  value="" required><br>
+	<input id="phone_num1"  class="form-control"  type="number" name="PHONE_NUM"  value="" required><br>
 	City:</br>
-	<input id="city1" type="text" name="CITY" value="" required><br>
+	<input id="city1"  class="form-control"  type="text" name="CITY" value="" required><br>
 	State:</br>
-	<input id="state1" type="text" name="STATE" value="" required><br>
+	<input id="state1"  class="form-control"  type="text" name="STATE" value="" required><br>
 	</br>
 
-	<button type="button" onclick="REG_SUBMIT()">Submit</button>
+	<button type="button" class="btn btn-outline-primary" onclick="REG_SUBMIT()">Submit</button>
 	
 	<script src="/static/reg.js"></script>	
 </div>

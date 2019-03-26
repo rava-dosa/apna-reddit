@@ -133,7 +133,7 @@ function get_recent_likes(){
         console.log(err);
       }
       try{
-        key1="posts_disliked";
+        key1="posts_liked";
         retlist=retstr[key1]
         for(j=0;j<retlist.length;j++){
           TEXT = get_text(retlist[j][1]);

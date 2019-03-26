@@ -397,4 +397,9 @@ def unsubscribe():
         else:
             return "ERROR"
 
+@app.route("/all_subreddit_log")
+def template_all_subreddit():
+	return render_template("subreddit_log.html")
+
+
 app.run(debug=True,threaded=True)
